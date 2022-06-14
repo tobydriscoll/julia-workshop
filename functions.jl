@@ -27,3 +27,15 @@ end
 roots isa Function
 typeof(roots)
 roots(1,2,2)
+
+
+## Broadcasting
+t = 1:6
+log(t)  # error 
+log.(t)
+
+plus1(t)
+plus1.(t)
+
+log.(1 .+ sin.(t))
+@. log(1+sin(t))
