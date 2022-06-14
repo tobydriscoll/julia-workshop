@@ -7,20 +7,35 @@ using InteractiveUtils
 # ╔═╡ abd797e0-e537-11ec-2419-1df9a9e2b7be
 using CSV,DataFrames, Statistics
 
+# ╔═╡ f4bfaa30-2d43-4dd6-8e79-e3bd4fccd23a
+md"Let's load a dataset showing the results of restaurant inspections in Delaware."
+
 # ╔═╡ 4fc23eff-86dc-4ef3-b3e2-f9c5e38ff88c
 insp = DataFrame(CSV.File("Restaurant_Inspection_Violations.csv"))
+
+# ╔═╡ d2a973c3-0876-4879-955f-fcf60a574a23
+md"Note that the `Violation Code` often has a `missing` value. We will narrow the table to the cases reporting an actual violation."
 
 # ╔═╡ 693ba7fc-57d8-4399-a331-3eaa8962b05d
 violations = dropmissing(insp,"Violation Code")
 
-# ╔═╡ df447a04-aed0-4345-b7fd-e11a0dcb4100
-bycity = groupby(violations,"Food Establishment City")
-
-# ╔═╡ cf9efde6-4f39-4742-9927-e957d2e0ed71
-sort(combine(bycity,nrow),:nrow,rev=true)
+# ╔═╡ 3d649810-34d0-400d-bfef-f78a1fc83c1a
+md"Here are all the unique codes that were recorded."
 
 # ╔═╡ 2dc9e40a-49e4-4a2b-86bd-a674a3310c84
 unique(violations."Violation Code")
+
+# ╔═╡ 4a4fe0fe-5007-4b8e-a056-0fd1240e9f84
+md"Next, we group the results by the city of the restaurant. This result is usually just an intermediate step to further processing."
+
+# ╔═╡ df447a04-aed0-4345-b7fd-e11a0dcb4100
+bycity = groupby(violations,"Food Establishment City")
+
+# ╔═╡ 39e36547-f9dc-4946-974d-b8d23b6c83b3
+md"Finally, we use `combine` to count the number of violations within each city."
+
+# ╔═╡ cf9efde6-4f39-4742-9927-e957d2e0ed71
+sort(combine(bycity,nrow),:nrow,rev=true)
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
@@ -343,10 +358,15 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 
 # ╔═╡ Cell order:
 # ╠═abd797e0-e537-11ec-2419-1df9a9e2b7be
+# ╟─f4bfaa30-2d43-4dd6-8e79-e3bd4fccd23a
 # ╠═4fc23eff-86dc-4ef3-b3e2-f9c5e38ff88c
+# ╟─d2a973c3-0876-4879-955f-fcf60a574a23
 # ╠═693ba7fc-57d8-4399-a331-3eaa8962b05d
+# ╟─3d649810-34d0-400d-bfef-f78a1fc83c1a
 # ╠═2dc9e40a-49e4-4a2b-86bd-a674a3310c84
+# ╟─4a4fe0fe-5007-4b8e-a056-0fd1240e9f84
 # ╠═df447a04-aed0-4345-b7fd-e11a0dcb4100
+# ╟─39e36547-f9dc-4946-974d-b8d23b6c83b3
 # ╠═cf9efde6-4f39-4742-9927-e957d2e0ed71
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
