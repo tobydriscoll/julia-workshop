@@ -1,6 +1,6 @@
 # Julia workshop
 
-## Manuals
+## Manuals and guides
 
 * [Julia language](https://docs.julialang.org/en/v1/)
 * [Unicode characters](https://docs.julialang.org/en/v1/manual/unicode-input/)
@@ -26,6 +26,13 @@ Also see the Project.toml file in this repository.
 * [Forem](https://forem.julialang.org): Blog posts, brand new
 * [Reddit](https://reddit.com/r/julia): Pretty quiet
 
+## Syllabus
+
+* [Notebook demonstration](notebook_demo.ipynb)
+* [Pluto demonstration](pluto/Pluto_demo.jl)
+* [Basic types and assignments](basic_types.jl)
+* [Conditionals and loops](conditionals_loops.jl)
+* [Random numbers](random_numbers.ipynb)
 
 ## Suggested exercises
 
@@ -46,7 +53,7 @@ Also see the Project.toml file in this repository.
     E\bigl[\left|x_n\right|\bigr] = \sqrt{\frac{2n}{\pi}}. 
     $$
     Perform a random walk with $n=100,000$ and verify that these expected values are approximately obtained.
-4. You know the Maclaurin series for the exponential function:
+4. You know the Maclaurin series for the exponential function,
     $$
     e^x = 1 + x + \frac{x^2}{2} + \cdots + \frac{x^n}{n!} + \cdots. 
     $$
