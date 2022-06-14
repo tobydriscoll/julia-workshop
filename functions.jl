@@ -27,13 +27,3 @@ end
 roots isa Function
 typeof(roots)
 roots(1,2,2)
-
-
-## Methods 
-methods(roots)
-roots(a,b) = -b/a
-methods(roots)
-roots(1,2)
-
-
-## Multiple dispatch

@@ -6,6 +6,7 @@
 * [Unicode characters](https://docs.julialang.org/en/v1/manual/unicode-input/)
 * [Julia-Matlab-Python cheatsheet](https://cheatsheets.quantecon.org)
 * [Differences from other major languages](https://docs.julialang.org/en/v1/manual/noteworthy-differences/)
+* [Book on numerical methods](https://tobydriscoll.net/fnc-julia)
 
 ## Packages
 
@@ -21,9 +22,9 @@ Also see the Project.toml file in this repository.
 
 ## Community
 
-* [Discourse](https://discourse.julialang.org/): Good mix of power users and noobs
+* [Discourse](https://discourse.julialang.org/): Good mix of power users and n00bs
 * [Zulip](https://julialang.zulipchat.com): Slack-like platform, mostly advanced users and developers
-* [Forem](https://forem.julialang.org): Blog posts, brand new
+* [Forem](https://forem.julialang.org): Blog posts and demo codes, brand-new
 * [Reddit](https://reddit.com/r/julia): Pretty quiet
 
 ## Syllabus
@@ -33,6 +34,8 @@ Also see the Project.toml file in this repository.
 * [Basic types and assignments](basic_types.jl)
 * [Conditionals and loops](conditionals_loops.jl)
 * [Random numbers](random_numbers.ipynb)
+* [Functions](functions.jl)
+* [Methods and dispatch](methods.ipynb)
 
 ## Suggested exercises
 
