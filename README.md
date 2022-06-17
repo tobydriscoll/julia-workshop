@@ -27,6 +27,25 @@ Also see the Project.toml file in this repository.
 * [Forem](https://forem.julialang.org): Blog posts and demo codes, brand-new
 * [Reddit](https://reddit.com/r/julia): Pretty quiet
 
+## Installing Julia
+
+Start by getting an [official download](https://julialang.org/downloads/) of the latest stable release. (Mac M1 users might want to choose 1.8.0-rc1 for ARM, which will be a but faster.) Install it in the usual way.
+
+Depending on how you want to use Julia...
+
+### VS Code
+
+1. [Download](https://code.visualstudio.com/download) and install VS Code. 
+2. Follow [these directions](https://github.com/julia-vscode/julia-vscode#installing-juliavs-codevs-code-julia-extension) to install the Julia language extension.
+
+### Jupyter
+
+Start Julia and then install `IJulia` from inside Julia by following [these directions](https://github.com/JuliaLang/IJulia.jl).
+
+### Pluto
+
+Follow these [instructions](https://github.com/fonsp/Pluto.jl#installation), or watch [this video](https://www.youtube.com/watch?v=OOjKEgbt8AI).
+
 ## Syllabus
 
 * [Notebook demonstration](notebook_demo.ipynb)
