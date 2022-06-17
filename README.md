@@ -36,8 +36,9 @@ Also see the Project.toml file in this repository.
 * [Random numbers](random_numbers.ipynb)
 * [Functions](functions.jl)
 * [Methods and dispatch](methods.ipynb)
-* [Graphics](pluto/graphics.jl)\
-* 
+* [Graphics](pluto/graphics.jl)
+* [Linear algebra](pluto/linear-algebra.jl)
+* [Modules and packages](modules_packages.ipynb)
 
 ## Suggested exercises
 
@@ -68,8 +69,15 @@ Also see the Project.toml file in this repository.
     x_{k+1} = x_k - \frac{f(x_k)}{f'(x_k)},
     $$
     starting with $x_1=$`x₁`. Return the entire sequence as a vector. You can decide how to make the iteration stop: based on a fixed number of iterations, or when $|x_{k+1}-x_k|$ is sufficiently small, for example.
-6. Write a function `trapezoid(f,a,b,n)` that applies the trapezoid formula for numerical integration,
+6. Write a function `trapezoid(f,interval,n)` that applies the trapezoid formula for numerical integration,
     $$
     \int_a^b f(x)\, dx \approx \frac{h}{2} \left[ f(x_0) + 2f(x_1) + \cdots + 2f(x_{n-1}) + f(x_n)\right], 
     $$
-    where $h=(b-a)/n$.
+    where $a$ and $b$ are the entries of the vector `interval` and $h=(b-a)/n$.
+7. (Continuation of 6) Write another method `trapezoid(y,a,b)`, where `y` is a vector and the numbers `a` and `b` define the endpoints of the integration interval. The vector $y$ has length $n+1$ and represents the values $f(x_i)$ in the trapezoid formula.
+8. How closely can you reproduce this plot?
+    
+    ![](exercise_plot.svg)
+
+    The data vectors are `x = randn(500); y = 2x.^2 + randn(500);` You will need to look at help for [Layouts](https://docs.juliaplots.org/latest/layouts) and [Attributes](https://docs.juliaplots.org/latest/attributes/).
+9. Try Exercises 3, 4, 6 from [https://tobydriscoll.net/fnc-julia/linsys/lu.html#exercises](this section) or 4 and 5 from [https://tobydriscoll.net/fnc-julia/linsys/structure.html](this section).
