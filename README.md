@@ -53,6 +53,7 @@ Follow these [instructions](https://github.com/fonsp/Pluto.jl#installation), or 
 * [Basic types and assignments](basic_types.jl)
 * [Conditionals and loops](conditionals_loops.jl)
 * [Random numbers](random_numbers.ipynb)
+* [Arrays and matrices](pluto/arrays_matrices.jl)
 * [Functions](functions.jl)
 * [Methods and dispatch](methods.ipynb)
 * [Graphics](pluto/graphics.jl)
