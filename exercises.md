@@ -57,4 +57,4 @@ where $a$ and $b$ are the entries of the vector `interval` and $h=(b-a)/n$.
 
 The data vectors are `x = randn(500); y = 2x.^2 + randn(500);` You will need to look at help for [Layouts](https://docs.juliaplots.org/latest/layouts) and [Attributes](https://docs.juliaplots.org/latest/attributes/).
 
-9. Try Exercises 3, 4, 6 from [this section](https://tobydriscoll.net/fnc-julia/linsys/lu.html#exercises) or 4 and 5 from [thi section](https://tobydriscoll.net/fnc-julia/linsys/structure.html).
+9. Try Exercises 3, 4, 6 from [this section](https://tobydriscoll.net/fnc-julia/linsys/lu.html#exercises) or 4 and 5 from [this section](https://tobydriscoll.net/fnc-julia/linsys/structure.html).
