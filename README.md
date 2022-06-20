@@ -63,3 +63,6 @@ Follow these [instructions](https://github.com/fonsp/Pluto.jl#installation), or 
 ## Exercises
 
 Try [these](exercises.md), or think up your own!
+
+This [website](https://exercism.org/tracks/julia/exercises), contains exercises with some basic tests built in to verify correctness. Solutions from other users can be 
+viewed so you can see other (perhaps shorter and better) ways of doing things. Aidan found it useful when learning the syntax for Julia.
