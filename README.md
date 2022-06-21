@@ -59,6 +59,15 @@ Follow these [instructions](https://github.com/fonsp/Pluto.jl#installation), or 
 * [Graphics](pluto/graphics.jl)
 * [Linear algebra](pluto/linear-algebra.jl)
 * [Modules and packages](modules_packages.ipynb)
+* Differential equations
+* Custom types
+* Performance
+* Unit testing
+* Interpolation and approximation
+* Optimization
+* Images and video
+* Machine learning
+* Dr Watson
 
 ## Exercises
 
