@@ -1,5 +1,6 @@
 ## Conditional
 
+'a' ≤ 'a'
 'a' < 'c' && 'c' < 'z'
 
 'a' < 'c' < 'z'
@@ -23,11 +24,34 @@ for n in 1:9
     println(s)
 end
 
+## local vs. global scope
+
+## v1: not what you might want
+
+for i in 1:5
+    z = i^2
+end
+z  # not defined at global scope
+
+## v2: explicit global declaration
+
+for i in 1:5
+    global zz = i^2
+end
+zz
+
+## v3: implicit inheritance of outer scope
+
+zzz = 0
+for i in 1:5
+    zzz = i^2
+end
+zzz
 
 ## enumerate
 
 for (i,n) in enumerate(10:10:100)
-    println(i+n)
+    println("i is $i, n is $n")
 end
 
 
