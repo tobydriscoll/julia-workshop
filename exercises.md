@@ -6,7 +6,8 @@
 
 $$
 f(n) = \begin{cases} 
-n/2, & \text{if $n$ is even,} \\ 3n+1, & \text{if $n$ is odd.} 
+n/2, & \text{if $n$ is even,} \\ 
+3n+1, & \text{if $n$ is odd.} 
 \end{cases}
 $$
 
@@ -41,7 +42,7 @@ Perform a random walk with $n=100,000$ and verify that these expected values are
 7. The following model of a riffle shuffle of a deck of cards was proposed by Gilbert and Shannon in 1955. A deck of $n$ cards is divided into two stacks; the probability that one stack has $k$ cards in it is
 
 $$
-2^{-n}\binom{n}{k}\dots. 
+2^{-n}\binom{n}{k}. 
 $$
 
 Then cards fall one by one from the bottoms of the two stacks. If the stacks have $k_A$ and $k_B$ cards at some moment, then the probability of stack $A$ contributing the next card is $k_A/(k_A+k_B)$. Write a script that performs the riffle shuffle on a vector of integers from $1$ to $n$. [loops, random numbers, arrays]
