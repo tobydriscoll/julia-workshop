@@ -361,9 +361,12 @@ p = OffsetArray(v,0:3)
 p[0]
 
 # ╔═╡ 74369d1b-468c-4a46-b269-2d48d26f56f1
+# ╠═╡ disabled = true
+#=╠═╡
 for i in 1:length(p)  # oh no
 	p[i] += 1
 end
+  ╠═╡ =#
 
 # ╔═╡ add7df95-240d-460b-b14f-0f46d2f9729f
 for i in eachindex(p)  # copacetic
@@ -432,9 +435,6 @@ q = [ sum(v) for v in eachcol(A)  ]
 
 # ╔═╡ 976f7f42-fd61-4765-9396-6347012c0dc6
 rowidx,colidx = AxisArrays.axes(A,1),AxisArrays.axes(A,2)
-
-# ╔═╡ b0d25568-7209-4645-825f-e309e0ba3cab
-A\ones(size(A,1))
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
@@ -744,6 +744,5 @@ uuid = "8e850b90-86db-534c-a0d3-1478176c7d93"
 # ╠═99fc3b69-16f8-467a-86e8-43be9e2fcc8a
 # ╠═55813850-d9ef-4a00-a11a-d2bee612aa3e
 # ╠═976f7f42-fd61-4765-9396-6347012c0dc6
-# ╠═b0d25568-7209-4645-825f-e309e0ba3cab
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
