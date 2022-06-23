@@ -59,15 +59,15 @@ There is Julia [support for vim](https://github.com/JuliaEditorSupport/julia-vim
 * [Basic types and assignments](basic_types.jl)
 * [Conditionals and loops](conditionals_loops.jl)
 * [Random numbers](random_numbers.ipynb)
-* [Arrays and matrices](pluto/arrays_matrices.jl)
+* [Arrays and matrices](pluto/arrays_matrices.jl), [HTML version](pluto/arrays_matrices.jl.html)
 * [Functions](functions.jl)
 * [Methods and dispatch](methods.ipynb)
 * [Graphics](pluto/graphics.jl)
 * [Linear algebra](pluto/linear-algebra.jl)
 * [Modules and packages](modules_packages.ipynb)
-* Differential equations
-* Custom types
+* [Differential equations](pluto/diffeqs.jl)
 * Performance
+* Custom types
 * Unit testing
 * Interpolation and approximation
 * Optimization
