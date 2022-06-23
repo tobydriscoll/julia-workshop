@@ -46,6 +46,12 @@ Start Julia and then install `IJulia` from inside Julia by following [these dire
 
 Follow these [instructions](https://github.com/fonsp/Pluto.jl#installation), or watch [this video](https://www.youtube.com/watch?v=OOjKEgbt8AI).
 
+### Other
+
+You could just run Julia in a terminal window and edit files any way you like. It's not a premium experience, though.
+
+There is Julia [support for vim](https://github.com/JuliaEditorSupport/julia-vim) and an [Emacs mode](https://github.com/JuliaEditorSupport/julia-emacs), and a [few others](https://github.com/JuliaEditorSupport).
+
 ## Syllabus
 
 * [Notebook demonstration](notebook_demo.ipynb)
