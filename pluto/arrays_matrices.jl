@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.19.5
+# v0.19.9
 
 using Markdown
 using InteractiveUtils
@@ -23,19 +23,13 @@ using AxisArrays
 md"# Vector"
 
 # ╔═╡ 9a18d6b7-e1c9-4688-895d-6592bebd3182
-v = [1,2,3,4]
+v = [3,4,5,6]
+
+# ╔═╡ e9d4df1b-4361-4e02-9780-ae1e3e201ed2
+typeof(v)
 
 # ╔═╡ 18b242bf-4b0a-479a-946c-957b184afc5d
-length(v)
-
-# ╔═╡ a826bb6c-35f1-46c3-ada9-b6e4fca47d81
-w = [1;2;3;4]
-
-# ╔═╡ 494d4630-23d7-42c0-babd-688bb1298169
-z = [1 2 3 4]
-
-# ╔═╡ f87a951c-2235-44fb-bb41-4567ad3361d7
-size(v),size(w),size(z)
+size(v),length(v)
 
 # ╔═╡ eea22231-de82-43f8-aa8d-db675fbf3e66
 md"Vector entries can be anything."
@@ -45,6 +39,18 @@ weirdo = [1,"foobar",rand(3)]
 
 # ╔═╡ 2f246374-89c1-4f6d-bd37-694a047308ea
 eltype(weirdo)
+
+# ╔═╡ 66c64329-d22c-4f27-b071-b3740107d036
+md"Within concatenations, vectors have a column shape. Note that commas, semicolons, and spaces are all different:"
+
+# ╔═╡ a826bb6c-35f1-46c3-ada9-b6e4fca47d81
+[1,2,3,4], [v,v]   # make a vector
+
+# ╔═╡ 469bb2c6-ec5a-4ef5-a50f-7034b31630b6
+[1;2;3;4], [v;v], vcat(v...)   # vertical concatenation
+
+# ╔═╡ 494d4630-23d7-42c0-babd-688bb1298169
+[1 2 3 4], [v v], hcat(v...)   # horizontal concatenation
 
 # ╔═╡ 4f17cbbf-ea49-47b1-96ae-759dabb14079
 md"## Indexing"
@@ -82,11 +88,14 @@ md"Boolean vectors can also be used for indexing. (Syntax is given later.)"
 # ╔═╡ 31b78a02-dd1d-4a42-a428-b45ea77443b1
 md"## Operations"
 
+# ╔═╡ e72eb8a2-87b5-467a-827b-4d40f408273a
+w = [-1,0,-1,0]
+
 # ╔═╡ 6343e973-53f8-4126-8693-068cff515718
-v + w
+v, w, v + w
 
 # ╔═╡ 234c9dd8-5112-4713-b693-7e6a883ca013
-v*w
+v * w
 
 # ╔═╡ b32d67ec-dbf6-454c-9826-5802cc6a846a
 v .* w
@@ -98,7 +107,7 @@ dot(v,w)
 md"## Growing a vector"
 
 # ╔═╡ 98425426-c48d-4ee7-901b-cbc2c25bee7e
-md"Unlike in Matlab, you can't extend the length of a vector on the fly."
+md"Unlike in MATLAB, you can't extend the length of a vector on the fly."
 
 # ╔═╡ 96599224-293b-4a43-99cd-2d9333507301
 # ╠═╡ disabled = true
@@ -114,7 +123,7 @@ end
   ╠═╡ =#
 
 # ╔═╡ ff15462f-448b-4815-bae6-4f06970ae148
-md"The following works, but it is inefficient with memory. (Really, you should avoid doing it in Matlab, too.)"
+md"The following works, but it is inefficient with memory. (MATLAB allows it, but you should avoid it when speed matters.)"
 
 # ╔═╡ d22f3571-4195-4f1d-9bf4-755e2a79eec1
 let f = [1,1]
@@ -125,7 +134,7 @@ let f = [1,1]
 end
 
 # ╔═╡ 8e00f07f-ee79-487f-be6a-d98bd5dc4d2a
-md"You can also use `push!` and `append!` to grow a vector (inefficiently)."
+md"You can use `push!` and `append!` to grow a vector (inefficiently)."
 
 # ╔═╡ 859ec95e-aa17-42b6-81c0-4b455518e2b4
 let 
@@ -137,7 +146,7 @@ let
 end
 
 # ╔═╡ 9c5dde59-8de2-4752-8ab5-bc2226e7f925
-md"(But once the element type is fixed, it can't be broadened.)"
+md"But once the element type is established, it can't be broadened:"
 
 # ╔═╡ f7ca212c-aaa9-4408-96ec-16c6b1e5149e
 let
@@ -170,7 +179,7 @@ let f = Vector{Float64}(undef,12)   # allocate only, don't fill
 end
 
 # ╔═╡ c7523846-3187-4b56-a9ee-dca1cc2dc873
-md"Another way to allocate memory, of the same type as a known array."
+md"Another way to allocate memory of the same type as a known array is `similar`."
 
 # ╔═╡ 18fad624-969f-4083-a656-735890512158
 similar(w)
@@ -329,7 +338,7 @@ md"# Copies and views"
 R
 
 # ╔═╡ 85a72ee5-c755-4b66-8234-638f54acb2af
-md"Slicing an array makes a copy of the relevant contents. These arrays become independent objects."
+md"Slicing an array makes a copy of the relevant contents. These arrays are then independent objects."
 
 # ╔═╡ 34ba2421-e2bf-4ec7-9203-d823e018efd2
 let
@@ -348,8 +357,44 @@ let
 	S,R
 end
 
+# ╔═╡ bd6ce65a-088d-485a-baae-d68448be911d
+md"# Reducers and iterators"
+
+# ╔═╡ 41560e8d-b22b-46a0-ae3c-2d36c81d644e
+let
+	X = rand(0:9,3,5)
+	X,sum(X,dims=1),sum(X,dims=2),sum(X)
+end
+
+# ╔═╡ 8ddb2830-24a8-410d-ac16-eb0c031a3a06
+let
+	X = rand(0:9,3,5)
+	X,maximum(X,dims=1),maximum(X,dims=2),maximum(X)
+end
+
+# ╔═╡ 0ef3a4ad-9be7-4aa6-9cfd-cf046ce4c5d7
+let
+	X = rand(0:9,3,5)
+	X,argmax(X,dims=1),argmax(X,dims=2),argmax(X)
+end
+
+# ╔═╡ ebb49bf6-7e89-45e6-9b8e-6bffbccd9667
+let
+	X = rand(0:9,3,5)
+	evensum(x,y) = 2((x+y)÷2)
+	X,reduce(evensum,X,dims=1,init=0)
+end
+
+# ╔═╡ e8128e0c-27e7-4fd5-bdab-30e085fe2c63
+let
+	X = rand(0:9,3,5)
+	by_col = [ norm(x) for x in eachcol(X) ]
+	by_row = [ norm(x) for x in eachrow(X) ]
+	by_col,by_row
+end
+
 # ╔═╡ ac8527d5-b6d1-4ec4-a2bd-4b16f90f0f32
-md"# More general arrays"
+md"# Generalized arrays"
 
 # ╔═╡ d1af1959-4486-4cdf-8de7-0585b6be2424
 rand(2,3,2)
@@ -456,8 +501,9 @@ OffsetArrays = "~1.12.5"
 PLUTO_MANIFEST_TOML_CONTENTS = """
 # This file is machine-generated - editing it directly is not advised
 
-julia_version = "1.7.1"
+julia_version = "1.8.0-rc1"
 manifest_format = "2.0"
+project_hash = "4198610d426ef275fc5a755d0fb66dc1fdceb6f6"
 
 [[deps.Adapt]]
 deps = ["LinearAlgebra"]
@@ -507,6 +553,7 @@ version = "4.1.0"
 [[deps.CompilerSupportLibraries_jll]]
 deps = ["Artifacts", "Libdl"]
 uuid = "e66e0078-7015-5450-92f7-15fbd957f2ae"
+version = "0.5.2+0"
 
 [[deps.ComponentArrays]]
 deps = ["ArrayInterface", "ChainRulesCore", "LinearAlgebra", "Requires"]
@@ -562,6 +609,7 @@ version = "1.12.5"
 [[deps.OpenBLAS_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "Libdl"]
 uuid = "4536629a-c528-5b80-bd46-f80d51c5b363"
+version = "0.3.20+0"
 
 [[deps.Parsers]]
 deps = ["Dates"]
@@ -594,6 +642,7 @@ version = "1.3.0"
 
 [[deps.SHA]]
 uuid = "ea8e919c-243c-51af-8825-aaa63cd721ce"
+version = "0.7.0"
 
 [[deps.Serialization]]
 uuid = "9e88b42a-f829-5b0c-bbe9-9e923198166b"
@@ -626,18 +675,21 @@ uuid = "4ec0a83e-493e-50e2-b9ac-8f72acf5a8f5"
 [[deps.libblastrampoline_jll]]
 deps = ["Artifacts", "Libdl", "OpenBLAS_jll"]
 uuid = "8e850b90-86db-534c-a0d3-1478176c7d93"
+version = "5.1.0+0"
 """
 
 # ╔═╡ Cell order:
 # ╟─5e719d36-28be-4cbc-be19-249971f551ca
 # ╠═9a18d6b7-e1c9-4688-895d-6592bebd3182
+# ╠═e9d4df1b-4361-4e02-9780-ae1e3e201ed2
 # ╠═18b242bf-4b0a-479a-946c-957b184afc5d
-# ╠═a826bb6c-35f1-46c3-ada9-b6e4fca47d81
-# ╠═494d4630-23d7-42c0-babd-688bb1298169
-# ╠═f87a951c-2235-44fb-bb41-4567ad3361d7
 # ╟─eea22231-de82-43f8-aa8d-db675fbf3e66
 # ╠═2d7a0a5b-5837-4e00-a3cd-77f9045c40fb
 # ╠═2f246374-89c1-4f6d-bd37-694a047308ea
+# ╟─66c64329-d22c-4f27-b071-b3740107d036
+# ╠═a826bb6c-35f1-46c3-ada9-b6e4fca47d81
+# ╠═469bb2c6-ec5a-4ef5-a50f-7034b31630b6
+# ╠═494d4630-23d7-42c0-babd-688bb1298169
 # ╟─4f17cbbf-ea49-47b1-96ae-759dabb14079
 # ╠═7aeb9694-8df5-4f14-9dcd-72b2f723ae34
 # ╠═fd6f5dd4-ab3f-4cdb-bcd9-797e3978503e
@@ -649,6 +701,7 @@ uuid = "8e850b90-86db-534c-a0d3-1478176c7d93"
 # ╠═3e0b6cd2-65f9-4f0d-98ad-12ad2132acf0
 # ╟─e3de8c04-19eb-4d67-9a81-81bcd484070b
 # ╟─31b78a02-dd1d-4a42-a428-b45ea77443b1
+# ╠═e72eb8a2-87b5-467a-827b-4d40f408273a
 # ╠═6343e973-53f8-4126-8693-068cff515718
 # ╠═234c9dd8-5112-4713-b693-7e6a883ca013
 # ╠═b32d67ec-dbf6-454c-9826-5802cc6a846a
@@ -723,6 +776,12 @@ uuid = "8e850b90-86db-534c-a0d3-1478176c7d93"
 # ╠═34ba2421-e2bf-4ec7-9203-d823e018efd2
 # ╟─0f2299ef-c799-4f58-8664-35d1276f4691
 # ╠═629c9b7a-451e-4f22-8a98-a50754e1bd70
+# ╟─bd6ce65a-088d-485a-baae-d68448be911d
+# ╠═41560e8d-b22b-46a0-ae3c-2d36c81d644e
+# ╠═8ddb2830-24a8-410d-ac16-eb0c031a3a06
+# ╠═0ef3a4ad-9be7-4aa6-9cfd-cf046ce4c5d7
+# ╠═ebb49bf6-7e89-45e6-9b8e-6bffbccd9667
+# ╠═e8128e0c-27e7-4fd5-bdab-30e085fe2c63
 # ╟─ac8527d5-b6d1-4ec4-a2bd-4b16f90f0f32
 # ╠═d1af1959-4486-4cdf-8de7-0585b6be2424
 # ╠═08d63c34-6642-4db7-b146-1f327605fd0d
