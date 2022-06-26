@@ -4,12 +4,6 @@
 using Markdown
 using InteractiveUtils
 
-# ╔═╡ caf65372-92a1-4aba-bd16-28539ceab9ee
-using LinearAlgebra
-
-# ╔═╡ 07ce6cb3-1f99-4941-8dce-f289ca343f5b
-using BenchmarkTools
-
 # ╔═╡ 08d63c34-6642-4db7-b146-1f327605fd0d
 using OffsetArrays
 
@@ -37,11 +31,14 @@ md"Vector entries can be anything."
 # ╔═╡ 2d7a0a5b-5837-4e00-a3cd-77f9045c40fb
 weirdo = [1,"foobar",rand(3)]
 
+# ╔═╡ 703834f9-3beb-484f-82e6-53fff9e8378a
+typeof(weirdo)
+
 # ╔═╡ 2f246374-89c1-4f6d-bd37-694a047308ea
 eltype(weirdo)
 
 # ╔═╡ 66c64329-d22c-4f27-b071-b3740107d036
-md"Within concatenations, vectors have a column shape. Note that commas, semicolons, and spaces are all different:"
+md"Within concatenations, vectors have a column shape. Note that commas and semicolons are a bit different:x"
 
 # ╔═╡ a826bb6c-35f1-46c3-ada9-b6e4fca47d81
 [1,2,3,4], [v,v]   # make a vector
@@ -49,11 +46,14 @@ md"Within concatenations, vectors have a column shape. Note that commas, semicol
 # ╔═╡ 469bb2c6-ec5a-4ef5-a50f-7034b31630b6
 [1;2;3;4], [v;v], vcat(v...)   # vertical concatenation
 
-# ╔═╡ 494d4630-23d7-42c0-babd-688bb1298169
-[1 2 3 4], [v v], hcat(v...)   # horizontal concatenation
+# ╔═╡ 3f380742-c9d3-466f-a70e-647ee3ab83f6
+md"Vectors are one-dimensional, but when shape matters, they are considered to be columns. To get a row vector (i.e., covector), use `adjoint` or `'`."
 
 # ╔═╡ 4f17cbbf-ea49-47b1-96ae-759dabb14079
 md"## Indexing"
+
+# ╔═╡ d405d6b5-e99c-4f9f-9143-160f239ea74b
+v
 
 # ╔═╡ 7aeb9694-8df5-4f14-9dcd-72b2f723ae34
 v[1],v[end]
@@ -64,6 +64,15 @@ v[[1,end]]
 # ╔═╡ 69777fb4-361c-4175-a551-6eb3367c3ee2
 md"Note the difference in the results above: tuple versus vector."
 
+# ╔═╡ 9649e840-e29a-42a0-8d43-f0d3496ed997
+md"Array indices must be integers:"
+
+# ╔═╡ 37be2e06-20c6-45ba-a0d6-7bc07cd8a816
+v[1.0]   # error
+
+# ╔═╡ 1b779e4e-0d1a-42af-95f4-66c53222c1b1
+v[Int(1.0)]
+
 # ╔═╡ 603e3761-1645-4d6e-993e-702e8f5cce8d
 md"We can use *destructuring* to assign entries to individual names."
 
@@ -73,14 +82,14 @@ let
 	println("a is $a, b is $b")
 end
 
-# ╔═╡ 6ca7c1fb-be0a-4514-a9cd-757cb2afd89a
-first(v),last(v)
-
-# ╔═╡ 645c0c4e-b3c3-43be-aceb-b84fb9bb8490
-v[4:-1:1],reverse(v)
+# ╔═╡ 24ac8421-9e76-428c-a769-cc56c068a310
+md"Ranges can be used to access multiple elements:"
 
 # ╔═╡ 3e0b6cd2-65f9-4f0d-98ad-12ad2132acf0
 v[1:2:end]
+
+# ╔═╡ 645c0c4e-b3c3-43be-aceb-b84fb9bb8490
+v[4:-1:1],reverse(v)
 
 # ╔═╡ e3de8c04-19eb-4d67-9a81-81bcd484070b
 md"Boolean vectors can also be used for indexing. (Syntax is given later.)"
@@ -88,39 +97,66 @@ md"Boolean vectors can also be used for indexing. (Syntax is given later.)"
 # ╔═╡ 31b78a02-dd1d-4a42-a428-b45ea77443b1
 md"## Operations"
 
+# ╔═╡ 3760d8ad-d2cb-49e2-8550-bce82d803052
+md"Adding vectors of the same length is straightfoward."
+
 # ╔═╡ e72eb8a2-87b5-467a-827b-4d40f408273a
 w = [-1,0,-1,0]
+
+# ╔═╡ 5054e90d-6232-445c-adf6-15c7a890a49e
+using LinearAlgebra; dot(v,w)
+
+# ╔═╡ 874da3d6-dcd3-43b7-9527-dbb1f818b1e9
+v', [v';v']
 
 # ╔═╡ 6343e973-53f8-4126-8693-068cff515718
 v, w, v + w
 
+# ╔═╡ 421b3301-d99a-46df-9aae-c7440411b4de
+md"However, you cannot add a scalar to a vector using `+`. Instead, you have to use elementwise addition, `.+`."
+
+# ╔═╡ 87ef64dc-73ba-4d31-9f8c-fd13c4c84f33
+v + 2   # error
+
+# ╔═╡ 821759f0-a2b3-4f8a-ada5-9e5186a36ec4
+v .+ 2
+
+# ╔═╡ 4c065eca-d56b-4c9d-8b7e-1a85a9bf7798
+md"OTOH, multiplication by a scalar using `*` is elementwise, but it is undefined for two vectors."
+
+# ╔═╡ da7b7406-5fa3-44af-804c-1fb197b28814
+v, 3v
+
 # ╔═╡ 234c9dd8-5112-4713-b693-7e6a883ca013
-v * w
+v * w   # error
 
 # ╔═╡ b32d67ec-dbf6-454c-9826-5802cc6a846a
 v .* w
 
-# ╔═╡ 5054e90d-6232-445c-adf6-15c7a890a49e
-dot(v,w)
+# ╔═╡ eb5f342d-beb6-4d4d-bda2-2f4a8ac191c9
+md"`*` is reserved for multiplication in the matrix sense, whenever that is well-defined."
+
+# ╔═╡ c4100984-f9ff-4d62-ad4d-3aa031dd2980
+w'
+
+# ╔═╡ 5677a017-be58-4b82-911d-dce15c7ac54e
+w'*v
 
 # ╔═╡ aad62c8e-af80-4c2a-909d-f5dea756f277
 md"## Growing a vector"
 
 # ╔═╡ 98425426-c48d-4ee7-901b-cbc2c25bee7e
-md"Unlike in MATLAB, you can't extend the length of a vector on the fly."
+md"Unlike in MATLAB, you can't extend the length of a vector on the fly by accessing past the last index."
 
 # ╔═╡ 96599224-293b-4a43-99cd-2d9333507301
-# ╠═╡ disabled = true
-#=╠═╡
 # Wrong version!
 
 let f = [1,1]
 	for n in 3:12
-		f[n] = f[n-1] + f[n-2]
+		f[n] = f[n-1] + f[n-2]   # error
 	end
 	f
 end
-  ╠═╡ =#
 
 # ╔═╡ ff15462f-448b-4815-bae6-4f06970ae148
 md"The following works, but it is inefficient with memory. (MATLAB allows it, but you should avoid it when speed matters.)"
@@ -151,7 +187,7 @@ md"But once the element type is established, it can't be broadened:"
 # ╔═╡ f7ca212c-aaa9-4408-96ec-16c6b1e5149e
 let
 	u = [1,2,3]
-	push!(u,sqrt(2))
+	push!(u,sqrt(2))   # error
 end
 
 # ╔═╡ 748375f2-fd0b-4c0e-b30e-e46ddcdf79b8
@@ -179,7 +215,7 @@ let f = Vector{Float64}(undef,12)   # allocate only, don't fill
 end
 
 # ╔═╡ c7523846-3187-4b56-a9ee-dca1cc2dc873
-md"Another way to allocate memory of the same type as a known array is `similar`."
+md"An easier way to allocate memory of the same type as a known array is `similar`."
 
 # ╔═╡ 18fad624-969f-4083-a656-735890512158
 similar(w)
@@ -190,29 +226,43 @@ similar(w,10)
 # ╔═╡ b321b426-1c83-4c12-9cff-22ecee73c873
 md"# Broadcasting"
 
-# ╔═╡ 1b9926f6-0ad0-472f-8661-9b74c074082e
-w .+ 2
+# ╔═╡ ddcd5436-1e4e-4cd3-9bed-5edaac746faa
+md"You can't add a scalar to an array using `+`. You have to use the elementwise operator `.+`."
 
-# ╔═╡ 5f4dd927-03db-4d40-87ee-1db2c71d3db5
-w .= 2
-
-# ╔═╡ 76070805-6627-4253-97e2-9ffebd74104e
-v,3v
+# ╔═╡ b917c53a-79bd-4c72-9415-3d086a0adbe4
+md"If you are stringing together multiple elementwise operations, you may use the `@.` as a convenient shorthand. Either way creates a *broadcast* operation that expands along singleton dimensions if necessary, then operates elementwise."
 
 # ╔═╡ f040fd06-7cb9-4f11-be20-5b0ab5583e3f
-(v .+ 1).^2
+(v .+ 1).^2, @. (v+1)^2
 
-# ╔═╡ afdb549f-dbd1-4339-917b-567f46c7df5f
-@. (v+1)^2
+# ╔═╡ e9d6d107-6e0b-4467-a93c-c68576edfe6d
+md"Broadcasting applies to assignment as well."
+
+# ╔═╡ 5f4dd927-03db-4d40-87ee-1db2c71d3db5
+let
+	g = [2,3,4]
+	@. g = 2
+	g
+end
+
+# ╔═╡ b69abcd8-7c68-48ae-a743-3d405721e347
+md"In fact, *any* function can be broadcast using `@.` or by adding a period to the function name at calling time."
+
+# ╔═╡ 489b086e-bd64-45fc-87c8-c6b647fe7b35
+#  exp(x)   # error
+exp.(-v), @. exp(-v)
 
 # ╔═╡ ac37dfec-71e7-47a5-ab9b-07e8d6cd140f
-md"Boolean index vector:"
+md"Here we use a broadcast to create a Boolean index vector:"
+
+# ╔═╡ 8e8e6fb4-d2f6-4c5c-8e82-0992efdc8bb7
+iseven.(v)
 
 # ╔═╡ 3db007d3-0575-4cbf-889a-8515965a96d1
-v[iseven.(v)]
+v, v[iseven.(v)]
 
 # ╔═╡ f61ba108-e80c-4925-989f-f96e0fe5560e
-md"Broadcasting will look for any matching array axis. They don't have to be in the same position."
+md"Broadcasting will match along any singleton axes, regardless of their dimension."
 
 # ╔═╡ 7bedb0bd-3415-4f73-9b1f-b3184d4156c6
 v .* [-1,0,2]'  # outer product
@@ -220,35 +270,51 @@ v .* [-1,0,2]'  # outer product
 # ╔═╡ ed388c54-2026-4595-ada8-88bc400e1fd0
 md"# Comprehension/generator"
 
-# ╔═╡ 1df6d8aa-e67c-11ec-3cca-259d877dd9ef
-begin 
+# ╔═╡ 14b271b8-e42b-44ae-958b-e2505a31e187
+md"Here is a version of polynomial evaluation using broadcasts."
+
+# ╔═╡ 88acc1cb-62ef-48d1-9dde-cd8eb63b6b38
+let x = 0.9
 	c = @. 1/(1:10)
-	# c = [1/n for n in 1:10]
-	x = 0.9
 	terms = @. c*x^(0:9)
-	# terms = [ c[n]*x^(n-1) for n in 1:10 ]
+	sum(terms)
 end
 
+# ╔═╡ bd04ba56-3526-4a80-91e9-f61734a4d62f
+md"Here is a version using *comprehensions* in place of the broadcasts."
+
+# ╔═╡ 1df6d8aa-e67c-11ec-3cca-259d877dd9ef
+let x = 0.9 
+	c = [1/n for n in 1:10]
+	terms = [ c[n]*x^(n-1) for n in 1:10 ]
+	sum(terms)
+end
+
+# ╔═╡ b84c734a-6236-4172-874c-4efaeceb9c6a
+md"Both versions are inefficient in that they have to create vectors just to accomplish what could be a scalar loop. For this situation we can use a *generator* instead."
+
 # ╔═╡ dd579061-1195-43a6-a090-549e3b5edb5f
-sum(terms)
+let x = 0.9
+	sum( x^(n-1)/n for n in 1:10 )
+end
 
-# ╔═╡ ca68eba4-1fe5-4ffe-9706-5b02e5cb9b9b
-sum( c[n]*x^(n-1) for n in 1:10 )
-
-# ╔═╡ a4c2eb2c-4e79-4e86-bb38-97f2028da5b2
-@btime sum( $c[n]*$x^(n-1) for n in 1:10 )
-
-# ╔═╡ 2e3b5f76-d21c-42cc-9133-7540721dc520
-@btime sum( [$c[n]*$x^(n-1) for n in 1:10] )
+# ╔═╡ 4e241150-22ad-4ad4-ad28-898ed815bd40
+md"Generators are available for other so-called reducers, such as `any` and `maximium`/`minimum`/`extrema`."
 
 # ╔═╡ 59e23025-3ab8-4029-8de5-b874974c96a4
-[ 3.2^n/prod(1:n) for n in 0:10 ]
+extrema( 3.2^n/prod(1:n) for n in 0:10 )
 
-# ╔═╡ 6eab8b39-ec80-4e68-a4c0-ee772c533b81
-maximum( 3.2^n/prod(1:n) for n in 0:20 )
+# ╔═╡ 7ff2aeb7-13bf-4151-a2a9-401ea3e62870
+any( exp(n) > 10n for n in 1:4 )
 
 # ╔═╡ 7175553d-9579-4a48-b852-6883cc71be85
 md"# Matrix"
+
+# ╔═╡ f792e544-04b5-4f6c-8fe9-dd3e1ceee93e
+md"`Matrix` is an alias for any array with two dimensions."
+
+# ╔═╡ 903368cd-f65d-45ec-909e-a921139ea1f8
+Matrix
 
 # ╔═╡ f74716db-8a21-466e-93a7-264f2c5d6dae
 md"## Construction"
@@ -260,25 +326,16 @@ v
 md"In the context of a matrix construction, a vector has a column shape."
 
 # ╔═╡ 374fe681-2c11-4458-9799-48d479013141
-hcat(v,v,v)  # or [v v v]
+hcat(v,v,v), [v v v]
 
 # ╔═╡ 11f4a51d-f6bb-470a-98be-4d354d2ab809
 vcat(v,v,v)
 
-# ╔═╡ 766b3400-f05b-4c23-9d38-3c18bad2cdc0
-md"Note the difference here:"
-
-# ╔═╡ 03ad85bf-4105-4d91-a1a5-2d34150651cb
-[v;v;v],[v,v,v]
-
 # ╔═╡ a7739d6f-370e-4cf3-8647-858ae12a74c5
-One = ones(4,5)
+ones(4,3), ones(Int64,4,3)
 
 # ╔═╡ 9c3f9d30-a21b-4145-8dbb-72edbee61493
 R = rand(2,4)
-
-# ╔═╡ 48eaa5c0-5a4b-44a7-adab-00e62c980177
-typeof(R)
 
 # ╔═╡ f7eb8c6a-d32a-46f5-8b91-8228b9a0b738
 H₃ = [1//(i+j-1) for i in 1:3, j in 1:3]
@@ -308,28 +365,25 @@ md"Any matrix can also be indexed linearly, in column-major order."
 R[:],vec(R)
 
 # ╔═╡ 7a342ce8-7524-44a6-bd2c-f243c90d4825
-R[5]
+R,R[5]
 
 # ╔═╡ 2fe1b8a9-1f6c-4d16-9bb4-0b088993f2d9
-R .> 0.5
+R .> 1.3
 
 # ╔═╡ f0479b5b-880e-4a59-a39b-740e678ae0e1
-findall(R .> 0.5)
+findall(R .> 1.3)
 
 # ╔═╡ 8c1b1669-4a3f-432a-9693-96179807d403
-R[R .> 0.5]
+R[R .> 1.3]
 
 # ╔═╡ 96ba0bde-a917-4155-bbbf-75f20b8a31dd
 md"`filter` does not need the time it takes to create and fill a boolean array:"
 
 # ╔═╡ da8d9125-5ab8-44cc-8b9f-b9b6b326793e
-filter(>(0.5),R)
+filter(>(1.3),R)
 
-# ╔═╡ b5c71c6e-d866-464d-abdc-f81645ea9494
-@btime R[R .> 0.5]
-
-# ╔═╡ 6f8a8e6f-dd63-4bd4-8b3c-c0647c0fe36b
-@btime filter(>(0.5),R)
+# ╔═╡ 6a2929fb-5889-4c79-a757-eb404b6847fa
+filter(endswith(".jl"),readdir())
 
 # ╔═╡ 7bf38ae7-a44a-4a68-958d-95179cfaf769
 md"# Copies and views"
@@ -348,7 +402,7 @@ let
 end
 
 # ╔═╡ 0f2299ef-c799-4f58-8664-35d1276f4691
-md"A `view` is just a reference (pointer) to contents. Either reference can change the contents."
+md"A `view`, however, is just a reference (pointer) to contents. Either reference can change the contents for both of them."
 
 # ╔═╡ 629c9b7a-451e-4f22-8a98-a50754e1bd70
 let
@@ -359,6 +413,9 @@ end
 
 # ╔═╡ bd6ce65a-088d-485a-baae-d68448be911d
 md"# Reducers and iterators"
+
+# ╔═╡ 8cd6273c-b40b-48f6-a518-efa851c86d8c
+md"Binary operators can be applied along an array axis to reduce the dimension. This concept is built-in for many such operations."
 
 # ╔═╡ 41560e8d-b22b-46a0-ae3c-2d36c81d644e
 let
@@ -378,12 +435,18 @@ let
 	X,argmax(X,dims=1),argmax(X,dims=2),argmax(X)
 end
 
+# ╔═╡ a993255c-63f4-4a02-b700-3e4d06270881
+md"Use `reduce` or `mapreduce` to apply any binary operation this way."
+
 # ╔═╡ ebb49bf6-7e89-45e6-9b8e-6bffbccd9667
 let
 	X = rand(0:9,3,5)
 	evensum(x,y) = 2((x+y)÷2)
-	X,reduce(evensum,X,dims=1,init=0)
+	X,reduce(evensum,X,dims=2,init=0),mapreduce(x->x^2,evensum,X,dims=2,init=0)
 end
+
+# ╔═╡ b5c259c6-71fe-4f0d-8469-af8c4c596329
+md"Depending on exactly what you are trying to do, it might be more convenient to iterate over columns or rows using `eachcol` or `eachrow`."
 
 # ╔═╡ e8128e0c-27e7-4fd5-bdab-30e085fe2c63
 let
@@ -396,14 +459,26 @@ end
 # ╔═╡ ac8527d5-b6d1-4ec4-a2bd-4b16f90f0f32
 md"# Generalized arrays"
 
+# ╔═╡ 2bd5f947-1c0c-43ab-b3b3-bf98b8a05753
+md"You can go to any number of dimensions. There are packages if you want to treat such arrays as tensors."
+
 # ╔═╡ d1af1959-4486-4cdf-8de7-0585b6be2424
 rand(2,3,2)
+
+# ╔═╡ e52d4220-46d6-4f37-8be7-7c817cdfc808
+md"## OffsetArrays"
+
+# ╔═╡ 7bcb5a26-242d-42c4-9205-6b7cfeccc78a
+md"This package allows you to start from an index other than 1 as the first element:"
 
 # ╔═╡ c9aaa3df-a1f1-4e60-a2db-fc22fecd6205
 p = OffsetArray(v,0:3)
 
 # ╔═╡ 60563857-4e83-43cd-8ccc-eff56abc703c
 p[0]
+
+# ╔═╡ 6cc66f7e-468b-4381-bcac-04137db4932d
+md"However, it creates a big potential 'gotcha'."
 
 # ╔═╡ 74369d1b-468c-4a46-b269-2d48d26f56f1
 # ╠═╡ disabled = true
@@ -485,14 +560,12 @@ rowidx,colidx = AxisArrays.axes(A,1),AxisArrays.axes(A,2)
 PLUTO_PROJECT_TOML_CONTENTS = """
 [deps]
 AxisArrays = "39de3d68-74b9-583c-8d2d-e117c070f3a9"
-BenchmarkTools = "6e4b80f9-dd63-53aa-95a3-0cdb28fa8baf"
 ComponentArrays = "b0b7db55-cfe3-40fc-9ded-d10e2dbeff66"
 LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 OffsetArrays = "6fe1bfb0-de20-5000-8ca7-80f57d26f881"
 
 [compat]
 AxisArrays = "~0.4.6"
-BenchmarkTools = "~1.3.1"
 ComponentArrays = "~0.12.0"
 OffsetArrays = "~1.12.5"
 """
@@ -503,7 +576,7 @@ PLUTO_MANIFEST_TOML_CONTENTS = """
 
 julia_version = "1.8.0-rc1"
 manifest_format = "2.0"
-project_hash = "4198610d426ef275fc5a755d0fb66dc1fdceb6f6"
+project_hash = "69d32d012d8a2321beea1917d6d65f395ed12b64"
 
 [[deps.Adapt]]
 deps = ["LinearAlgebra"]
@@ -531,12 +604,6 @@ deps = ["Dates", "IntervalSets", "IterTools", "RangeArrays"]
 git-tree-sha1 = "1dd4d9f5beebac0c03446918741b1a03dc5e5788"
 uuid = "39de3d68-74b9-583c-8d2d-e117c070f3a9"
 version = "0.4.6"
-
-[[deps.BenchmarkTools]]
-deps = ["JSON", "Logging", "Printf", "Profile", "Statistics", "UUIDs"]
-git-tree-sha1 = "4c10eee4af024676200bc7752e536f858c6b8f93"
-uuid = "6e4b80f9-dd63-53aa-95a3-0cdb28fa8baf"
-version = "1.3.1"
 
 [[deps.ChainRulesCore]]
 deps = ["Compat", "LinearAlgebra", "SparseArrays"]
@@ -581,24 +648,12 @@ git-tree-sha1 = "fa6287a4469f5e048d763df38279ee729fbd44e5"
 uuid = "c8e1da08-722c-5040-9ed9-7db0dc04731e"
 version = "1.4.0"
 
-[[deps.JSON]]
-deps = ["Dates", "Mmap", "Parsers", "Unicode"]
-git-tree-sha1 = "3c837543ddb02250ef42f4738347454f95079d4e"
-uuid = "682c06a0-de6a-54ab-a142-c8b1cf79cde6"
-version = "0.21.3"
-
 [[deps.Libdl]]
 uuid = "8f399da3-3557-5675-b5ff-fb832c97cbdb"
 
 [[deps.LinearAlgebra]]
 deps = ["Libdl", "libblastrampoline_jll"]
 uuid = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
-
-[[deps.Logging]]
-uuid = "56ddb016-857b-54e1-b83d-db4d58db5568"
-
-[[deps.Mmap]]
-uuid = "a63ad114-7e13-5084-954f-fe012c677804"
 
 [[deps.OffsetArrays]]
 deps = ["Adapt"]
@@ -611,19 +666,9 @@ deps = ["Artifacts", "CompilerSupportLibraries_jll", "Libdl"]
 uuid = "4536629a-c528-5b80-bd46-f80d51c5b363"
 version = "0.3.20+0"
 
-[[deps.Parsers]]
-deps = ["Dates"]
-git-tree-sha1 = "1285416549ccfcdf0c50d4997a94331e88d68413"
-uuid = "69de0a69-1ddd-5017-9359-2bf0b02dc9f0"
-version = "2.3.1"
-
 [[deps.Printf]]
 deps = ["Unicode"]
 uuid = "de0858da-6303-5e67-8744-51eddeeeb8d7"
-
-[[deps.Profile]]
-deps = ["Printf"]
-uuid = "9abbd945-dff8-562f-b5e8-e1ebf5ef1b79"
 
 [[deps.Random]]
 deps = ["SHA", "Serialization"]
@@ -685,27 +730,41 @@ version = "5.1.0+0"
 # ╠═18b242bf-4b0a-479a-946c-957b184afc5d
 # ╟─eea22231-de82-43f8-aa8d-db675fbf3e66
 # ╠═2d7a0a5b-5837-4e00-a3cd-77f9045c40fb
+# ╠═703834f9-3beb-484f-82e6-53fff9e8378a
 # ╠═2f246374-89c1-4f6d-bd37-694a047308ea
-# ╟─66c64329-d22c-4f27-b071-b3740107d036
+# ╠═66c64329-d22c-4f27-b071-b3740107d036
 # ╠═a826bb6c-35f1-46c3-ada9-b6e4fca47d81
 # ╠═469bb2c6-ec5a-4ef5-a50f-7034b31630b6
-# ╠═494d4630-23d7-42c0-babd-688bb1298169
+# ╟─3f380742-c9d3-466f-a70e-647ee3ab83f6
+# ╠═874da3d6-dcd3-43b7-9527-dbb1f818b1e9
 # ╟─4f17cbbf-ea49-47b1-96ae-759dabb14079
+# ╠═d405d6b5-e99c-4f9f-9143-160f239ea74b
 # ╠═7aeb9694-8df5-4f14-9dcd-72b2f723ae34
 # ╠═fd6f5dd4-ab3f-4cdb-bcd9-797e3978503e
 # ╟─69777fb4-361c-4175-a551-6eb3367c3ee2
+# ╟─9649e840-e29a-42a0-8d43-f0d3496ed997
+# ╠═37be2e06-20c6-45ba-a0d6-7bc07cd8a816
+# ╠═1b779e4e-0d1a-42af-95f4-66c53222c1b1
 # ╟─603e3761-1645-4d6e-993e-702e8f5cce8d
 # ╠═e5e8cc16-fa8c-4fba-92ad-ac04f3d70be6
-# ╠═6ca7c1fb-be0a-4514-a9cd-757cb2afd89a
-# ╠═645c0c4e-b3c3-43be-aceb-b84fb9bb8490
+# ╟─24ac8421-9e76-428c-a769-cc56c068a310
 # ╠═3e0b6cd2-65f9-4f0d-98ad-12ad2132acf0
+# ╠═645c0c4e-b3c3-43be-aceb-b84fb9bb8490
 # ╟─e3de8c04-19eb-4d67-9a81-81bcd484070b
 # ╟─31b78a02-dd1d-4a42-a428-b45ea77443b1
+# ╟─3760d8ad-d2cb-49e2-8550-bce82d803052
 # ╠═e72eb8a2-87b5-467a-827b-4d40f408273a
 # ╠═6343e973-53f8-4126-8693-068cff515718
+# ╟─421b3301-d99a-46df-9aae-c7440411b4de
+# ╠═87ef64dc-73ba-4d31-9f8c-fd13c4c84f33
+# ╠═821759f0-a2b3-4f8a-ada5-9e5186a36ec4
+# ╟─4c065eca-d56b-4c9d-8b7e-1a85a9bf7798
+# ╠═da7b7406-5fa3-44af-804c-1fb197b28814
 # ╠═234c9dd8-5112-4713-b693-7e6a883ca013
 # ╠═b32d67ec-dbf6-454c-9826-5802cc6a846a
-# ╠═caf65372-92a1-4aba-bd16-28539ceab9ee
+# ╟─eb5f342d-beb6-4d4d-bda2-2f4a8ac191c9
+# ╠═c4100984-f9ff-4d62-ad4d-3aa031dd2980
+# ╠═5677a017-be58-4b82-911d-dce15c7ac54e
 # ╠═5054e90d-6232-445c-adf6-15c7a890a49e
 # ╟─aad62c8e-af80-4c2a-909d-f5dea756f277
 # ╟─98425426-c48d-4ee7-901b-cbc2c25bee7e
@@ -724,35 +783,38 @@ version = "5.1.0+0"
 # ╠═18fad624-969f-4083-a656-735890512158
 # ╠═9717091e-9cf9-4fdc-b595-c5d8166059b3
 # ╟─b321b426-1c83-4c12-9cff-22ecee73c873
-# ╠═1b9926f6-0ad0-472f-8661-9b74c074082e
-# ╠═5f4dd927-03db-4d40-87ee-1db2c71d3db5
-# ╠═76070805-6627-4253-97e2-9ffebd74104e
+# ╠═ddcd5436-1e4e-4cd3-9bed-5edaac746faa
+# ╟─b917c53a-79bd-4c72-9415-3d086a0adbe4
 # ╠═f040fd06-7cb9-4f11-be20-5b0ab5583e3f
-# ╠═afdb549f-dbd1-4339-917b-567f46c7df5f
+# ╟─e9d6d107-6e0b-4467-a93c-c68576edfe6d
+# ╠═5f4dd927-03db-4d40-87ee-1db2c71d3db5
+# ╠═b69abcd8-7c68-48ae-a743-3d405721e347
+# ╠═489b086e-bd64-45fc-87c8-c6b647fe7b35
 # ╟─ac37dfec-71e7-47a5-ab9b-07e8d6cd140f
+# ╠═8e8e6fb4-d2f6-4c5c-8e82-0992efdc8bb7
 # ╠═3db007d3-0575-4cbf-889a-8515965a96d1
 # ╟─f61ba108-e80c-4925-989f-f96e0fe5560e
 # ╠═7bedb0bd-3415-4f73-9b1f-b3184d4156c6
 # ╟─ed388c54-2026-4595-ada8-88bc400e1fd0
+# ╠═14b271b8-e42b-44ae-958b-e2505a31e187
+# ╠═88acc1cb-62ef-48d1-9dde-cd8eb63b6b38
+# ╟─bd04ba56-3526-4a80-91e9-f61734a4d62f
 # ╠═1df6d8aa-e67c-11ec-3cca-259d877dd9ef
+# ╟─b84c734a-6236-4172-874c-4efaeceb9c6a
 # ╠═dd579061-1195-43a6-a090-549e3b5edb5f
-# ╠═ca68eba4-1fe5-4ffe-9706-5b02e5cb9b9b
-# ╠═07ce6cb3-1f99-4941-8dce-f289ca343f5b
-# ╠═a4c2eb2c-4e79-4e86-bb38-97f2028da5b2
-# ╠═2e3b5f76-d21c-42cc-9133-7540721dc520
+# ╟─4e241150-22ad-4ad4-ad28-898ed815bd40
 # ╠═59e23025-3ab8-4029-8de5-b874974c96a4
-# ╠═6eab8b39-ec80-4e68-a4c0-ee772c533b81
+# ╠═7ff2aeb7-13bf-4151-a2a9-401ea3e62870
 # ╟─7175553d-9579-4a48-b852-6883cc71be85
+# ╟─f792e544-04b5-4f6c-8fe9-dd3e1ceee93e
+# ╠═903368cd-f65d-45ec-909e-a921139ea1f8
 # ╟─f74716db-8a21-466e-93a7-264f2c5d6dae
 # ╠═a047e00a-bbdd-46ae-9a2c-b2acfddee3d9
 # ╟─54c1f1af-aecf-4b26-9bc4-e3f82f6cb7d0
 # ╠═374fe681-2c11-4458-9799-48d479013141
 # ╠═11f4a51d-f6bb-470a-98be-4d354d2ab809
-# ╟─766b3400-f05b-4c23-9d38-3c18bad2cdc0
-# ╠═03ad85bf-4105-4d91-a1a5-2d34150651cb
 # ╠═a7739d6f-370e-4cf3-8647-858ae12a74c5
 # ╠═9c3f9d30-a21b-4145-8dbb-72edbee61493
-# ╠═48eaa5c0-5a4b-44a7-adab-00e62c980177
 # ╠═f7eb8c6a-d32a-46f5-8b91-8228b9a0b738
 # ╟─fb5492d0-5677-4904-8f71-38e0ae14b678
 # ╠═04956e52-aa75-419e-8034-cb4955a635d9
@@ -768,8 +830,7 @@ version = "5.1.0+0"
 # ╠═8c1b1669-4a3f-432a-9693-96179807d403
 # ╟─96ba0bde-a917-4155-bbbf-75f20b8a31dd
 # ╠═da8d9125-5ab8-44cc-8b9f-b9b6b326793e
-# ╠═b5c71c6e-d866-464d-abdc-f81645ea9494
-# ╠═6f8a8e6f-dd63-4bd4-8b3c-c0647c0fe36b
+# ╠═6a2929fb-5889-4c79-a757-eb404b6847fa
 # ╟─7bf38ae7-a44a-4a68-958d-95179cfaf769
 # ╠═767c0de5-ab10-4b10-921c-a37192977039
 # ╟─85a72ee5-c755-4b66-8234-638f54acb2af
@@ -777,16 +838,23 @@ version = "5.1.0+0"
 # ╟─0f2299ef-c799-4f58-8664-35d1276f4691
 # ╠═629c9b7a-451e-4f22-8a98-a50754e1bd70
 # ╟─bd6ce65a-088d-485a-baae-d68448be911d
+# ╟─8cd6273c-b40b-48f6-a518-efa851c86d8c
 # ╠═41560e8d-b22b-46a0-ae3c-2d36c81d644e
 # ╠═8ddb2830-24a8-410d-ac16-eb0c031a3a06
 # ╠═0ef3a4ad-9be7-4aa6-9cfd-cf046ce4c5d7
+# ╟─a993255c-63f4-4a02-b700-3e4d06270881
 # ╠═ebb49bf6-7e89-45e6-9b8e-6bffbccd9667
+# ╟─b5c259c6-71fe-4f0d-8469-af8c4c596329
 # ╠═e8128e0c-27e7-4fd5-bdab-30e085fe2c63
 # ╟─ac8527d5-b6d1-4ec4-a2bd-4b16f90f0f32
+# ╟─2bd5f947-1c0c-43ab-b3b3-bf98b8a05753
 # ╠═d1af1959-4486-4cdf-8de7-0585b6be2424
+# ╟─e52d4220-46d6-4f37-8be7-7c817cdfc808
+# ╟─7bcb5a26-242d-42c4-9205-6b7cfeccc78a
 # ╠═08d63c34-6642-4db7-b146-1f327605fd0d
 # ╠═c9aaa3df-a1f1-4e60-a2db-fc22fecd6205
 # ╠═60563857-4e83-43cd-8ccc-eff56abc703c
+# ╟─6cc66f7e-468b-4381-bcac-04137db4932d
 # ╠═74369d1b-468c-4a46-b269-2d48d26f56f1
 # ╠═add7df95-240d-460b-b14f-0f46d2f9729f
 # ╠═28000052-526b-4172-bbc5-c961565f9227
