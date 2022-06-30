@@ -65,12 +65,12 @@ There is Julia [support for vim](https://github.com/JuliaEditorSupport/julia-vim
 * [Graphics](pluto/graphics.jl)
 * [Linear algebra](pluto/linear-algebra.jl)
 * [Modules and packages](modules_packages.ipynb)
+* [Optimization](pluto/optimization.jl)
 * [Differential equations](pluto/diffeqs.jl)
 * Performance
 * Custom types
 * Unit testing
 * Interpolation and approximation
-* Optimization
 * Images and video
 * Machine learning
 * Dr Watson
