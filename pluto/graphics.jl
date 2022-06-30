@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.19.5
+# v0.19.9
 
 using Markdown
 using InteractiveUtils
@@ -17,12 +17,6 @@ end
 # ╔═╡ d7044a22-ec05-11ec-0620-970f29509b1a
 using Plots
 
-# ╔═╡ 290263db-f32f-455d-8e86-17b8b1434ccc
-begin 
-	using LaTeXStrings
-	gr()
-end
-
 # ╔═╡ 8b4c43d2-6ba6-41c2-8668-109e441c0c96
 using PlutoUI
 
@@ -32,75 +26,20 @@ using RDatasets
 # ╔═╡ c625bef5-f0ff-443c-be03-d7108c219e12
 using VegaLite
 
-# ╔═╡ 733159d8-eed0-4c28-87c4-fefb7f63290c
-using DataVoyager
-
 # ╔═╡ 06005879-5911-44e6-8d84-4f2fe20735c5
 begin 
 	t = range(0,6π,300)
 	f = t -> exp(sin(t))
 end
 
-# ╔═╡ a166de6c-cfb4-424e-a2ec-21204409b2e8
-plot(t,f.(t))
-
-# ╔═╡ 63e0dc11-412b-403c-92cf-dc27cef530f2
-plot(f,0,6π)
-
-# ╔═╡ ac2f4394-6bfc-42e3-94e5-92b276f4ad58
-begin
-	import PlotlyJS
-	plotlyjs()
-end
-
-# ╔═╡ 6b4303e1-bbeb-4e3c-8b8b-1a8123672813
-plot(f,0,6π,label="")
-
-# ╔═╡ d62949af-73ff-4952-a9a6-36e0216d8eeb
-plot(f,0,6π,label=L"e^{\sin(x)}")
-
-# ╔═╡ 374d90f5-8e19-4f26-8afd-315df71bbcee
-gr()
-
 # ╔═╡ 8878d893-6a5d-48db-803e-2753d253148f
 md"## Layouts"
-
-# ╔═╡ 37adb080-17d8-4b47-b299-6e41a4329570
-let
-	plt = plot(layout=(2,2),titlefontsize=10,legend=false)
-	for (s,f) in enumerate([sin,cos,sinh,cosh])
-		plot!(f,-2,2,subplot=s,title=string(f),yaxis=((-3,3),[-1,0,1]))
-	end
-	plt
-end
 
 # ╔═╡ 2b1ea238-569d-4024-a595-821b04fd4f2d
 md"## Animations"
 
-# ╔═╡ c32e6f3c-a064-423d-85ca-cbfb8b74d32c
-let
-	anim = @animate for t in range(-2,2,101)
-		plt = plot(layout=(2,2),titlefontsize=10,legend=false)
-		for (s,f) in enumerate([sin,cos,sinh,cosh])
-			plot!(f,-2,t,l=3,subplot=s,
-				title=string(f),xlims=(-2,2),yaxis=((-3,3),[-1,0,1]))
-		end
-	end
-	mp4(anim,"animation.mp4")
-end
-
 # ╔═╡ 1570e282-161e-4279-af83-b51602ae5324
 md"# 3D"
-
-# ╔═╡ 321d1767-1114-4b18-be2f-9d7fcfdf3f7b
-let a=1,b=2,c=3
-	# plotlyjs()
-	f = (x,y) -> a*x^2 + b*x*y + c*y^2 + 2x
-	x = y = range(-4,4,81)
-	Z = [ f(x,y) for x in x, y in y ]
-	# contour(x,y,Z')
-	surface(x,y,Z')
-end
 
 # ╔═╡ d7756b30-5bd2-4478-b187-f379c537a636
 md"## Interactive"
@@ -119,16 +58,6 @@ md"## Interactive"
 # ╔═╡ 80a44a95-efd6-45c1-b11a-f122ae83a662
 aqs,bqs,cqs
 
-# ╔═╡ 343ccbc0-079c-40b1-b7eb-ac52989d5c44
-let
-	plotlyjs()
-	f = (x,y) -> aqs*x^2 + bqs*x*y + cqs*y^2 + 2x
-	x = y = range(-4,4,81)
-	Z = [ f(x,y) for x in x, y in y ]
-	contour(x,y,Z',levels=-40:4:40,
-		title="a=$aqs, b=$bqs, c=$cqs",aspect_ratio=1,fill=true)
-end
-
 # ╔═╡ ff1dab28-603e-4e30-8ed1-660abb30d0f4
 md"# Data plots"
 
@@ -139,6 +68,74 @@ tips = RDatasets.dataset("reshape2","tips")
 begin 
 	using StatsPlots
 	@df tips scatter(:TotalBill,:Tip,group=:Sex)
+end
+
+# ╔═╡ a166de6c-cfb4-424e-a2ec-21204409b2e8
+plot(t,f.(t))
+
+# ╔═╡ 63e0dc11-412b-403c-92cf-dc27cef530f2
+plot(f,0,6π)
+
+# ╔═╡ ac2f4394-6bfc-42e3-94e5-92b276f4ad58
+begin
+	import PlotlyJS
+	plotlyjs()
+end
+
+# ╔═╡ 6b4303e1-bbeb-4e3c-8b8b-1a8123672813
+plot(f,0,6π,label="")
+
+# ╔═╡ 290263db-f32f-455d-8e86-17b8b1434ccc
+begin 
+	using LaTeXStrings
+	gr()
+end
+
+# ╔═╡ d62949af-73ff-4952-a9a6-36e0216d8eeb
+plot(f,0,6π,label=L"e^{\sin(x)}")
+
+# ╔═╡ 374d90f5-8e19-4f26-8afd-315df71bbcee
+gr()
+
+# ╔═╡ 37adb080-17d8-4b47-b299-6e41a4329570
+let
+	plt = plot(layout=(2,2),titlefontsize=10,legend=false)
+	for (s,f) in enumerate([sin,cos,sinh,cosh])
+		plot!(f,-2,2,subplot=s,title=string(f),yaxis=((-3,3),[-1,0,1]))
+	end
+	plt
+end
+
+# ╔═╡ c32e6f3c-a064-423d-85ca-cbfb8b74d32c
+let
+	anim = @animate for t in range(-2,2,101)
+		plt = plot(layout=(2,2),titlefontsize=10,legend=false)
+		for (s,f) in enumerate([sin,cos,sinh,cosh])
+			plot!(f,-2,t,l=3,subplot=s,
+				title=string(f),xlims=(-2,2),yaxis=((-3,3),[-1,0,1]))
+		end
+	end
+	mp4(anim,"animation.mp4")
+end
+
+# ╔═╡ 321d1767-1114-4b18-be2f-9d7fcfdf3f7b
+let a=1,b=2,c=3
+	# plotlyjs()
+	f = (x,y) -> a*x^2 + b*x*y + c*y^2 + 2x
+	x = y = range(-4,4,81)
+	Z = [ f(x,y) for x in x, y in y ]
+	# contour(x,y,Z')
+	surface(x,y,Z')
+end
+
+# ╔═╡ 343ccbc0-079c-40b1-b7eb-ac52989d5c44
+let
+	plotlyjs()
+	f = (x,y) -> aqs*x^2 + bqs*x*y + cqs*y^2 + 2x
+	x = y = range(-4,4,81)
+	Z = [ f(x,y) for x in x, y in y ]
+	contour(x,y,Z',levels=-40:4:40,
+		title="a=$aqs, b=$bqs, c=$cqs",aspect_ratio=1,fill=true)
 end
 
 # ╔═╡ ab44e9f9-8b44-49f8-97e7-59dd38ccd96a
@@ -156,13 +153,9 @@ tips |> @vlplot(
 	column=:Smoker
 )
 
-# ╔═╡ e7f577d9-829a-408c-a925-471e5423690d
-# Voyager(tips)
-
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
 [deps]
-DataVoyager = "5721bf48-af8e-5845-8445-c9e18126e773"
 LaTeXStrings = "b964fa9f-0449-5b57-a5c2-d3ea65f4040f"
 PlotlyJS = "f0f68f2c-4968-5e81-91da-67840de0976a"
 Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
@@ -172,7 +165,6 @@ StatsPlots = "f3b207a7-027a-5e70-b257-86293d7955fd"
 VegaLite = "112f6efa-9a02-5b7d-90c0-432ed331239a"
 
 [compat]
-DataVoyager = "~1.0.2"
 LaTeXStrings = "~1.3.0"
 PlotlyJS = "~0.18.8"
 Plots = "~1.29.1"
@@ -186,8 +178,9 @@ VegaLite = "~2.6.0"
 PLUTO_MANIFEST_TOML_CONTENTS = """
 # This file is machine-generated - editing it directly is not advised
 
-julia_version = "1.7.1"
+julia_version = "1.8.0-rc1"
 manifest_format = "2.0"
+project_hash = "d2f3ed9a8b2b6902af555cb9d5910dc1e92190b3"
 
 [[deps.AbstractFFTs]]
 deps = ["ChainRulesCore", "LinearAlgebra"]
@@ -209,6 +202,7 @@ version = "3.3.3"
 
 [[deps.ArgTools]]
 uuid = "0dad84c5-d112-42e6-8d28-ef12dabb789f"
+version = "1.1.1"
 
 [[deps.Arpack]]
 deps = ["Arpack_jll", "Libdl", "LinearAlgebra", "Logging"]
@@ -339,6 +333,7 @@ version = "3.45.0"
 [[deps.CompilerSupportLibraries_jll]]
 deps = ["Artifacts", "Libdl"]
 uuid = "e66e0078-7015-5450-92f7-15fbd957f2ae"
+version = "0.5.2+0"
 
 [[deps.ConstructionBase]]
 deps = ["LinearAlgebra"]
@@ -385,12 +380,6 @@ git-tree-sha1 = "d88a19299eba280a6d062e135a43f00323ae70bf"
 uuid = "e7dc6d0d-1eca-5fa6-8ad6-5aecde8b7ea5"
 version = "0.4.13"
 
-[[deps.DataVoyager]]
-deps = ["DataValues", "Electron", "FilePaths", "IterableTables", "IteratorInterfaceExtensions", "JSON", "TableTraits", "Test", "URIParser", "VegaLite"]
-git-tree-sha1 = "159f1d3f07225a59dd4edb8ad15e607fefac9543"
-uuid = "5721bf48-af8e-5845-8445-c9e18126e773"
-version = "1.0.2"
-
 [[deps.Dates]]
 deps = ["Printf"]
 uuid = "ade2ca70-3891-5945-98fb-dc099432e06a"
@@ -428,8 +417,9 @@ uuid = "ffbed154-4ef7-542d-bbb7-c09d3a79fcae"
 version = "0.8.6"
 
 [[deps.Downloads]]
-deps = ["ArgTools", "LibCURL", "NetworkOptions"]
+deps = ["ArgTools", "FileWatching", "LibCURL", "NetworkOptions"]
 uuid = "f43a241f-c20a-4ad4-852c-f6b1247861c6"
+version = "1.6.0"
 
 [[deps.DualNumbers]]
 deps = ["Calculus", "NaNMath", "SpecialFunctions"]
@@ -442,12 +432,6 @@ deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
 git-tree-sha1 = "3f3a2501fa7236e9b911e0f7a588c657e822bb6d"
 uuid = "5ae413db-bbd1-5e63-b57d-d24a61df00f5"
 version = "2.2.3+0"
-
-[[deps.Electron]]
-deps = ["Base64", "FilePaths", "JSON", "Pkg", "Sockets", "URIParser", "UUIDs"]
-git-tree-sha1 = "a53025d3eabe23659065b3c5bba7b4ffb1327aa0"
-uuid = "a1bb12fb-d4d1-54b4-b10a-ee7951ef7ad3"
-version = "3.1.2"
 
 [[deps.Expat_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
@@ -688,12 +672,6 @@ git-tree-sha1 = "fa6287a4469f5e048d763df38279ee729fbd44e5"
 uuid = "c8e1da08-722c-5040-9ed9-7db0dc04731e"
 version = "1.4.0"
 
-[[deps.IterableTables]]
-deps = ["DataValues", "IteratorInterfaceExtensions", "Requires", "TableTraits", "TableTraitsUtils"]
-git-tree-sha1 = "70300b876b2cebde43ebc0df42bc8c94a144e1b4"
-uuid = "1c8ee90f-4401-5389-894e-7a04a3dc0f4d"
-version = "1.0.0"
-
 [[deps.IteratorInterfaceExtensions]]
 git-tree-sha1 = "a3f24677c21f5bbe9d2a714f95dcd58337fb2856"
 uuid = "82899510-4779-5014-852e-03e436cf321d"
@@ -783,10 +761,12 @@ uuid = "4af54fe1-eca0-43a8-85a7-787d91b784e3"
 [[deps.LibCURL]]
 deps = ["LibCURL_jll", "MozillaCACerts_jll"]
 uuid = "b27032c2-a3e7-50c8-80cd-2d36dbcbfd21"
+version = "0.6.3"
 
 [[deps.LibCURL_jll]]
 deps = ["Artifacts", "LibSSH2_jll", "Libdl", "MbedTLS_jll", "Zlib_jll", "nghttp2_jll"]
 uuid = "deac9b47-8bc7-5906-a0fe-35ac56dc84c0"
+version = "7.81.0+0"
 
 [[deps.LibGit2]]
 deps = ["Base64", "NetworkOptions", "Printf", "SHA"]
@@ -795,6 +775,7 @@ uuid = "76f85450-5226-5b5a-8eaa-529ad045b433"
 [[deps.LibSSH2_jll]]
 deps = ["Artifacts", "Libdl", "MbedTLS_jll"]
 uuid = "29816b5a-b9ab-546f-933c-edad1886dfa8"
+version = "1.10.2+0"
 
 [[deps.Libdl]]
 uuid = "8f399da3-3557-5675-b5ff-fb832c97cbdb"
@@ -885,6 +866,7 @@ version = "1.0.3"
 [[deps.MbedTLS_jll]]
 deps = ["Artifacts", "Libdl"]
 uuid = "c8ffd9c3-330d-5841-b78e-0817d7145fa1"
+version = "2.28.0+0"
 
 [[deps.Measures]]
 git-tree-sha1 = "e498ddeee6f9fdb4551ce855a46f54dbd900245f"
@@ -908,6 +890,7 @@ version = "0.7.3"
 
 [[deps.MozillaCACerts_jll]]
 uuid = "14a3606d-f60d-562e-9121-12d972cd8159"
+version = "2022.2.1"
 
 [[deps.MultivariateStats]]
 deps = ["Arpack", "LinearAlgebra", "SparseArrays", "Statistics", "StatsBase"]
@@ -940,6 +923,7 @@ version = "0.4.10"
 
 [[deps.NetworkOptions]]
 uuid = "ca575930-c2e3-43a9-ace4-1e988b2c1908"
+version = "1.2.0"
 
 [[deps.NodeJS]]
 deps = ["Pkg"]
@@ -967,10 +951,12 @@ version = "1.3.5+1"
 [[deps.OpenBLAS_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "Libdl"]
 uuid = "4536629a-c528-5b80-bd46-f80d51c5b363"
+version = "0.3.20+0"
 
 [[deps.OpenLibm_jll]]
 deps = ["Artifacts", "Libdl"]
 uuid = "05823500-19ac-5b8b-9628-191a04bc5112"
+version = "0.8.1+0"
 
 [[deps.OpenSSL_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
@@ -1034,6 +1020,7 @@ version = "0.40.1+0"
 [[deps.Pkg]]
 deps = ["Artifacts", "Dates", "Downloads", "LibGit2", "Libdl", "Logging", "Markdown", "Printf", "REPL", "Random", "SHA", "Serialization", "TOML", "Tar", "UUIDs", "p7zip_jll"]
 uuid = "44cfe95a-1eb2-52ea-b672-e2afdf69b78f"
+version = "1.8.0"
 
 [[deps.PlotThemes]]
 deps = ["PlotUtils", "Statistics"]
@@ -1173,6 +1160,7 @@ version = "0.3.0+0"
 
 [[deps.SHA]]
 uuid = "ea8e919c-243c-51af-8825-aaa63cd721ce"
+version = "0.7.0"
 
 [[deps.Scratch]]
 deps = ["Dates"]
@@ -1271,6 +1259,7 @@ uuid = "4607b0f0-06f3-5cda-b6b1-a6196a1729e9"
 [[deps.TOML]]
 deps = ["Dates"]
 uuid = "fa267f1f-6049-4f14-aa54-33bafae1ed76"
+version = "1.0.0"
 
 [[deps.TableOperations]]
 deps = ["SentinelArrays", "Tables", "Test"]
@@ -1299,6 +1288,7 @@ version = "1.7.0"
 [[deps.Tar]]
 deps = ["ArgTools", "SHA"]
 uuid = "a4e569a6-e804-4fa4-b0f3-eef7a1d5b13e"
+version = "1.10.0"
 
 [[deps.TensorCore]]
 deps = ["LinearAlgebra"]
@@ -1556,6 +1546,7 @@ version = "1.4.0+3"
 [[deps.Zlib_jll]]
 deps = ["Libdl"]
 uuid = "83775a58-1f1d-513f-b197-d71354ab007a"
+version = "1.2.12+3"
 
 [[deps.Zstd_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
@@ -1572,6 +1563,7 @@ version = "0.15.1+0"
 [[deps.libblastrampoline_jll]]
 deps = ["Artifacts", "Libdl", "OpenBLAS_jll"]
 uuid = "8e850b90-86db-534c-a0d3-1478176c7d93"
+version = "5.1.0+0"
 
 [[deps.libfdk_aac_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
@@ -1594,10 +1586,12 @@ version = "1.3.7+1"
 [[deps.nghttp2_jll]]
 deps = ["Artifacts", "Libdl"]
 uuid = "8e850ede-7688-5339-a07c-302acd2aaf8d"
+version = "1.41.0+1"
 
 [[deps.p7zip_jll]]
 deps = ["Artifacts", "Libdl"]
 uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
+version = "17.4.0+0"
 
 [[deps.x264_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
@@ -1649,7 +1643,5 @@ version = "0.9.1+5"
 # ╠═7e101e45-67e2-47b3-a226-7df554b99aac
 # ╠═c625bef5-f0ff-443c-be03-d7108c219e12
 # ╠═b4424130-3f51-46e4-974f-8ef2f0c02b6d
-# ╠═733159d8-eed0-4c28-87c4-fefb7f63290c
-# ╠═e7f577d9-829a-408c-a925-471e5423690d
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
