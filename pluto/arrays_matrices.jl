@@ -4,6 +4,9 @@
 using Markdown
 using InteractiveUtils
 
+# ╔═╡ 9681f51e-0d96-4d9b-adf0-00f38e538c2a
+using SparseArrays
+
 # ╔═╡ 08d63c34-6642-4db7-b146-1f327605fd0d
 using OffsetArrays
 
@@ -368,19 +371,22 @@ R[:],vec(R)
 R,R[5]
 
 # ╔═╡ 2fe1b8a9-1f6c-4d16-9bb4-0b088993f2d9
-R .> 1.3
+R .> 0.4
 
 # ╔═╡ f0479b5b-880e-4a59-a39b-740e678ae0e1
-findall(R .> 1.3)
+findall(R .> 0.4)
 
 # ╔═╡ 8c1b1669-4a3f-432a-9693-96179807d403
-R[R .> 1.3]
+R[R .> 0.4]
+
+# ╔═╡ 88694085-f9c3-4a0a-b823-f84f7d499604
+@. R > 0.4
 
 # ╔═╡ 96ba0bde-a917-4155-bbbf-75f20b8a31dd
 md"`filter` does not need the time it takes to create and fill a boolean array:"
 
 # ╔═╡ da8d9125-5ab8-44cc-8b9f-b9b6b326793e
-filter(>(1.3),R)
+filter(>(0.4),R)
 
 # ╔═╡ 6a2929fb-5889-4c79-a757-eb404b6847fa
 filter(endswith(".jl"),readdir())
@@ -389,16 +395,16 @@ filter(endswith(".jl"),readdir())
 md"# Copies and views"
 
 # ╔═╡ 767c0de5-ab10-4b10-921c-a37192977039
-R
+T = rand(0:9,3,4)
 
 # ╔═╡ 85a72ee5-c755-4b66-8234-638f54acb2af
 md"Slicing an array makes a copy of the relevant contents. These arrays are then independent objects."
 
 # ╔═╡ 34ba2421-e2bf-4ec7-9203-d823e018efd2
 let
-	S = R[1:2,1:2]
+	S = T[1:2,1:2]
 	@. S += 1
-	S,R
+	S,T
 end
 
 # ╔═╡ 0f2299ef-c799-4f58-8664-35d1276f4691
@@ -406,10 +412,27 @@ md"A `view`, however, is just a reference (pointer) to contents. Either referenc
 
 # ╔═╡ 629c9b7a-451e-4f22-8a98-a50754e1bd70
 let
-	S = view(R,1:2,1:2)
+	S = view(T,1:2,1:2)
 	@. S += 1
-	S,R
+	S,T
 end
+
+# ╔═╡ cb4bc8c9-d46d-4d4e-b048-b1dc95c375c7
+let
+	S = T
+	S[2,2] = 100
+	S,T
+end
+
+# ╔═╡ ba3482fc-382c-4d92-beb2-8803da234736
+let
+	S = copy(T)
+	S[2,2] = 200
+	S,T
+end
+
+# ╔═╡ 1207ec32-9efb-45a3-8688-e3a7ed5e4145
+sparse(T)
 
 # ╔═╡ bd6ce65a-088d-485a-baae-d68448be911d
 md"# Reducers and iterators"
@@ -481,12 +504,9 @@ p[0]
 md"However, it creates a big potential 'gotcha'."
 
 # ╔═╡ 74369d1b-468c-4a46-b269-2d48d26f56f1
-# ╠═╡ disabled = true
-#=╠═╡
 for i in 1:length(p)  # oh no
 	p[i] += 1
 end
-  ╠═╡ =#
 
 # ╔═╡ add7df95-240d-460b-b14f-0f46d2f9729f
 for i in eachindex(p)  # copacetic
@@ -563,6 +583,7 @@ AxisArrays = "39de3d68-74b9-583c-8d2d-e117c070f3a9"
 ComponentArrays = "b0b7db55-cfe3-40fc-9ded-d10e2dbeff66"
 LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 OffsetArrays = "6fe1bfb0-de20-5000-8ca7-80f57d26f881"
+SparseArrays = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
 
 [compat]
 AxisArrays = "~0.4.6"
@@ -576,7 +597,7 @@ PLUTO_MANIFEST_TOML_CONTENTS = """
 
 julia_version = "1.8.0-rc1"
 manifest_format = "2.0"
-project_hash = "69d32d012d8a2321beea1917d6d65f395ed12b64"
+project_hash = "83e8ffeb6482923e4413ba6e9e9e4a860667fd9d"
 
 [[deps.Adapt]]
 deps = ["LinearAlgebra"]
@@ -828,6 +849,7 @@ version = "5.1.0+0"
 # ╠═2fe1b8a9-1f6c-4d16-9bb4-0b088993f2d9
 # ╠═f0479b5b-880e-4a59-a39b-740e678ae0e1
 # ╠═8c1b1669-4a3f-432a-9693-96179807d403
+# ╠═88694085-f9c3-4a0a-b823-f84f7d499604
 # ╟─96ba0bde-a917-4155-bbbf-75f20b8a31dd
 # ╠═da8d9125-5ab8-44cc-8b9f-b9b6b326793e
 # ╠═6a2929fb-5889-4c79-a757-eb404b6847fa
@@ -837,6 +859,10 @@ version = "5.1.0+0"
 # ╠═34ba2421-e2bf-4ec7-9203-d823e018efd2
 # ╟─0f2299ef-c799-4f58-8664-35d1276f4691
 # ╠═629c9b7a-451e-4f22-8a98-a50754e1bd70
+# ╠═cb4bc8c9-d46d-4d4e-b048-b1dc95c375c7
+# ╠═ba3482fc-382c-4d92-beb2-8803da234736
+# ╠═9681f51e-0d96-4d9b-adf0-00f38e538c2a
+# ╠═1207ec32-9efb-45a3-8688-e3a7ed5e4145
 # ╟─bd6ce65a-088d-485a-baae-d68448be911d
 # ╟─8cd6273c-b40b-48f6-a518-efa851c86d8c
 # ╠═41560e8d-b22b-46a0-ae3c-2d36c81d644e
