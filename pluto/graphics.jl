@@ -26,11 +26,58 @@ using RDatasets
 # ╔═╡ c625bef5-f0ff-443c-be03-d7108c219e12
 using VegaLite
 
-# ╔═╡ 06005879-5911-44e6-8d84-4f2fe20735c5
-begin 
-	t = range(0,6π,300)
-	f = t -> exp(sin(t))
+# ╔═╡ 74ce0568-69f0-4aee-ae82-a5a957ff7fef
+function trapezoid(f,interval,n)
+	a,b = interval
+	h = (b-a)/n
+	return h*( (f(a)+f(b))/2 + sum(f(a+i*h) for i in 1:n-1) )
 end
+
+# ╔═╡ 95a0a7b9-4e8e-4f87-8ae6-5ac6c42ac6b5
+trapezoid(cos,(0,4),100)
+
+# ╔═╡ e8c0acdf-7ddf-456c-b662-4067d7fec391
+sin(4)
+
+# ╔═╡ 11fd2e0f-b620-4acc-9aad-a5ac015108e9
+function newton(f,df,x₁)
+	x = [float(x₁)]
+	n = 1
+	Δx = Inf
+	while abs(Δx) > 1e-12
+		Δx = -f(x[n])/df(x[n])
+		push!(x,x[n]+Δx)
+		n += 1
+		(n > 10) && break
+		# if n > 10
+		# 	break
+		# end
+	end
+	return x
+end
+		
+
+# ╔═╡ b0584051-de0d-49a6-a7ee-12857bb6b3d8
+newton(cos,x->-sin(x),4)
+
+# ╔═╡ 64a5be02-b78b-4845-8721-9d91f374e90f
+
+
+# ╔═╡ f3e26374-63ce-4aaf-9b94-1ee174a5e9d0
+
+
+# ╔═╡ 1ae0275b-982e-43fa-bd67-35cf7f8cedc1
+
+
+# ╔═╡ 86515ff8-72bb-4f64-885b-48d29913c892
+
+
+# ╔═╡ 235cdf85-c619-4efd-87c3-00ea61938a0f
+md"""
+Plotting packages: PyPlot, Plotly, GR, Makie, ...
+
+Meta package: Plots
+"""
 
 # ╔═╡ 8878d893-6a5d-48db-803e-2753d253148f
 md"## Layouts"
@@ -70,8 +117,21 @@ begin
 	@df tips scatter(:TotalBill,:Tip,group=:Sex)
 end
 
+# ╔═╡ 6bccc704-2258-4f75-869d-c346d816e9bb
+default(size=(600,240))
+
+# ╔═╡ 06005879-5911-44e6-8d84-4f2fe20735c5
+begin 
+	gr()
+	t = range(0,6π,300)
+	f = t -> exp(sin(t));
+end
+
+# ╔═╡ 34a61f67-7e6f-4581-99cc-bf06e687b177
+y = [f(ti) for ti in t, f in [cos,sin]]
+
 # ╔═╡ a166de6c-cfb4-424e-a2ec-21204409b2e8
-plot(t,f.(t))
+plot(t,f.(t),label="")
 
 # ╔═╡ 63e0dc11-412b-403c-92cf-dc27cef530f2
 plot(f,0,6π)
@@ -92,14 +152,23 @@ begin
 end
 
 # ╔═╡ d62949af-73ff-4952-a9a6-36e0216d8eeb
-plot(f,0,6π,label=L"e^{\sin(x)}")
+plot(f,0,6π,label=L"e^{\sin(x)}",legend=:bottomleft)
 
-# ╔═╡ 374d90f5-8e19-4f26-8afd-315df71bbcee
-gr()
+# ╔═╡ 9e819f18-e7fd-4874-8bda-88ac1f4c8288
+plot(t,sin.(t),label="sin")
+
+# ╔═╡ d4dc68c8-575d-4018-bf65-2704487dbcf5
+plot!(t,cos.(t),label="cos")
+
+# ╔═╡ 875151d4-7acd-4260-a37c-112a4c72a4ef
+plot(t,y,label=["cos" "sin"])
+
+# ╔═╡ 581a25f7-61fa-4a05-b11e-6dec92a8ce99
+plot(t,y,label=["cos","sin"])
 
 # ╔═╡ 37adb080-17d8-4b47-b299-6e41a4329570
 let
-	plt = plot(layout=(2,2),titlefontsize=10,legend=false)
+	plt = plot(size=(500,360),layout=(2,2),titlefontsize=10,legend=false)
 	for (s,f) in enumerate([sin,cos,sinh,cosh])
 		plot!(f,-2,2,subplot=s,title=string(f),yaxis=((-3,3),[-1,0,1]))
 	end
@@ -109,7 +178,7 @@ end
 # ╔═╡ c32e6f3c-a064-423d-85ca-cbfb8b74d32c
 let
 	anim = @animate for t in range(-2,2,101)
-		plt = plot(layout=(2,2),titlefontsize=10,legend=false)
+		plt = plot(size=(500,360),layout=(2,2),titlelocation=:left,titlefontsize=10,legend=false)
 		for (s,f) in enumerate([sin,cos,sinh,cosh])
 			plot!(f,-2,t,l=3,subplot=s,
 				title=string(f),xlims=(-2,2),yaxis=((-3,3),[-1,0,1]))
@@ -120,12 +189,22 @@ end
 
 # ╔═╡ 321d1767-1114-4b18-be2f-9d7fcfdf3f7b
 let a=1,b=2,c=3
-	# plotlyjs()
+	plotlyjs()
 	f = (x,y) -> a*x^2 + b*x*y + c*y^2 + 2x
 	x = y = range(-4,4,81)
 	Z = [ f(x,y) for x in x, y in y ]
-	# contour(x,y,Z')
-	surface(x,y,Z')
+	contour(x,y,Z',aspect_ratio=1,fill=true,levels=36,color=:viridis)
+	#surface(x,y,Z')
+end
+
+# ╔═╡ 7b51f1e8-0fe3-41e7-b865-58b73189c13a
+let a=1,b=2,c=3
+	plotlyjs()
+	f = (x,y) -> sin(x^2+exp(y/2))
+	x = y = range(-4,4,81)
+	Z = [ f(x,y) for x in x, y in y ]
+	contour(x,y,Z',aspect_ratio=1,fill=true,levels=17,color=:redsblues)
+	#surface(x,y,Z')
 end
 
 # ╔═╡ 343ccbc0-079c-40b1-b7eb-ac52989d5c44
@@ -135,11 +214,12 @@ let
 	x = y = range(-4,4,81)
 	Z = [ f(x,y) for x in x, y in y ]
 	contour(x,y,Z',levels=-40:4:40,
-		title="a=$aqs, b=$bqs, c=$cqs",aspect_ratio=1,fill=true)
+		title="a=$aqs, b=$bqs, c=$cqs",topmargin=3Plots.mm,
+		titlefontsize=10,aspect_ratio=1,fill=true)
 end
 
 # ╔═╡ ab44e9f9-8b44-49f8-97e7-59dd38ccd96a
-scatter(tips.TotalBill,tips.Tip,label="")
+scatter(tips.TotalBill,tips.Tip,label="",m=:pentagon,markerfacealpha=0.4)
 
 # ╔═╡ 7e101e45-67e2-47b3-a226-7df554b99aac
 histogram(tips.Tip./tips.TotalBill,label="% tip")
@@ -1613,7 +1693,18 @@ version = "0.9.1+5"
 """
 
 # ╔═╡ Cell order:
+# ╠═74ce0568-69f0-4aee-ae82-a5a957ff7fef
+# ╠═95a0a7b9-4e8e-4f87-8ae6-5ac6c42ac6b5
+# ╠═e8c0acdf-7ddf-456c-b662-4067d7fec391
+# ╠═11fd2e0f-b620-4acc-9aad-a5ac015108e9
+# ╠═b0584051-de0d-49a6-a7ee-12857bb6b3d8
+# ╠═64a5be02-b78b-4845-8721-9d91f374e90f
+# ╠═f3e26374-63ce-4aaf-9b94-1ee174a5e9d0
+# ╠═1ae0275b-982e-43fa-bd67-35cf7f8cedc1
+# ╠═86515ff8-72bb-4f64-885b-48d29913c892
+# ╟─235cdf85-c619-4efd-87c3-00ea61938a0f
 # ╠═d7044a22-ec05-11ec-0620-970f29509b1a
+# ╠═6bccc704-2258-4f75-869d-c346d816e9bb
 # ╠═06005879-5911-44e6-8d84-4f2fe20735c5
 # ╠═a166de6c-cfb4-424e-a2ec-21204409b2e8
 # ╠═63e0dc11-412b-403c-92cf-dc27cef530f2
@@ -1621,13 +1712,18 @@ version = "0.9.1+5"
 # ╠═6b4303e1-bbeb-4e3c-8b8b-1a8123672813
 # ╠═290263db-f32f-455d-8e86-17b8b1434ccc
 # ╠═d62949af-73ff-4952-a9a6-36e0216d8eeb
-# ╠═374d90f5-8e19-4f26-8afd-315df71bbcee
+# ╠═9e819f18-e7fd-4874-8bda-88ac1f4c8288
+# ╠═d4dc68c8-575d-4018-bf65-2704487dbcf5
+# ╠═34a61f67-7e6f-4581-99cc-bf06e687b177
+# ╠═875151d4-7acd-4260-a37c-112a4c72a4ef
+# ╠═581a25f7-61fa-4a05-b11e-6dec92a8ce99
 # ╟─8878d893-6a5d-48db-803e-2753d253148f
 # ╠═37adb080-17d8-4b47-b299-6e41a4329570
 # ╟─2b1ea238-569d-4024-a595-821b04fd4f2d
 # ╠═c32e6f3c-a064-423d-85ca-cbfb8b74d32c
 # ╟─1570e282-161e-4279-af83-b51602ae5324
 # ╠═321d1767-1114-4b18-be2f-9d7fcfdf3f7b
+# ╠═7b51f1e8-0fe3-41e7-b865-58b73189c13a
 # ╟─d7756b30-5bd2-4478-b187-f379c537a636
 # ╠═8b4c43d2-6ba6-41c2-8668-109e441c0c96
 # ╠═7d61d0a6-1c3a-412b-9e2f-ee90cf2cd0b7
