@@ -7,12 +7,6 @@ using InteractiveUtils
 # ╔═╡ 20ddb73e-f2f8-11ec-1d55-a7217d3c9dde
 using DifferentialEquations
 
-# ╔═╡ 227c6a7e-3483-4738-bc78-c2dc019200b8
-begin 
-	using Plots
-	default(linewidth=2,size=(500,300))
-end
-
 # ╔═╡ f2a5bf67-f664-4b27-8338-227587f84dfa
 using DiffEqSensitivity
 
@@ -66,6 +60,19 @@ end
 # ╔═╡ 65a0a050-59dd-4567-895f-73dea93bc0aa
 pp_sol = solve(pp_ivp)
 
+# ╔═╡ 227c6a7e-3483-4738-bc78-c2dc019200b8
+begin 
+	using Plots
+	default(linewidth=2,size=(500,260))
+	plot(pp_sol,label=["prey" "predator"])
+end
+
+# ╔═╡ fd065001-4e6a-4581-a66c-298a86c7fc73
+md"The `Plots.plot` command is extended to work with these solution objects. Even though the solution was found only at discrete times, it can be evaluated anywhere to make smooth curves."
+
+# ╔═╡ 9b93de2c-fc0a-43c1-9a09-71e6208134ec
+md"If you index the solution object in the manner of an array, you access the discrete values found by the solver."
+
 # ╔═╡ bdceae52-6aca-4d09-9e84-f534a7058c3a
 pp_sol[:,1:4]
 
@@ -75,23 +82,39 @@ pp_sol[1,:]
 # ╔═╡ b278223e-dc2c-496c-bb7a-8b3d025eed3d
 pp_sol[:,20]
 
+# ╔═╡ 2c5ca0d2-8961-44f1-af38-f3404751dc1c
+md"You can extract the time and solution parts using field names."
+
 # ╔═╡ 8ccb9bd3-bcec-489a-9a3e-1da87a082ec6
 pp_sol.t,pp_sol.u
+
+# ╔═╡ a09ccbe9-c43a-4e29-a241-73515bed2a8e
+md"The time step size is chosen automatically to try to meet an error tolerance. It can vary throughout the integration."
+
+# ╔═╡ 2fe0ee33-04a6-4cac-aa9f-13a2ae0d6b20
+scatter(pp_sol.t,[NaN;diff(pp_sol.t)],label="",
+	yaxis=(:log,"time step"),xaxis="t")
+
+# ╔═╡ c3b35446-816a-45ab-a4ca-5fef3b087a29
+md"If you call the object like a function, then you evaluate it at the given time(s)."
 
 # ╔═╡ b00af8c2-2123-42b9-8aea-0df7fdea0a5c
 pp_sol(5),pp_sol(5:5:50)
 
-# ╔═╡ 2cf415fa-6565-4701-a838-bd0a3e2ebc89
-plot(pp_sol,label=["prey" "predator"])
-
-# ╔═╡ 2fe0ee33-04a6-4cac-aa9f-13a2ae0d6b20
-plot(pp_sol.t,[NaN;diff(pp_sol.t)],yaxis=:log,label="")
+# ╔═╡ c1befd13-37ac-4e79-93ff-730a26674f60
+md"The plot command allows selecting the variables to be displayed. Here is a plot in the phase plane, selected by `vars=(1,2)`."
 
 # ╔═╡ 12697fb8-b46a-4e1d-b6b5-ad789e7e2666
 plot(pp_sol,vars=(1,2),label=nothing,xaxis="prey",yaxis="predator")
 
+# ╔═╡ f538e845-4924-4eb2-92ac-26b53ad69d96
+md"There is an `animate` function to allow making animations with minimal fuss. But if we base the animation on the raw solution values returned, the selected step sizes may make the plot somewhat misleading."
+
 # ╔═╡ 52c7bd0b-f88f-4249-b48c-fc83a1f812aa
 animate(pp_sol,vars=(1,2),every=5)
+
+# ╔═╡ a3fb04f4-7534-4a74-88d7-8fbf426fe4bf
+md"We can instead have the solver save the solution at a regular interval, so that the animation reflects the passage of time more realistically." 
 
 # ╔═╡ 3b2d4947-dcb8-42f3-b774-0f918056ebf0
 let
@@ -112,7 +135,7 @@ function predprey!(du_dt,u,p,t)
 	α,β,γ,δ = p
 	dx_dt = α*x - γ*x*y
 	dy_dt = -β*y + δ*x*y
-	du_dt .= [dx_dt,dy_dt]   # the dot is needed here!
+	du_dt .= [dx_dt,dy_dt]   # the dot is important here!
 end
 
 # ╔═╡ 29b34667-f5bb-4833-a532-ed2c08274413
@@ -180,7 +203,7 @@ du[1],du[2]
 # ╔═╡ 4b0d9878-eeb7-470a-a33a-d927df274dba
 let
 	opts = Dict(:label=>["prey" "predator"],:link=>:xy,:leg=>:topleft)
-	plot(du[1]';subplot=1,layout=(2,1),title="sensitivity to α",opts...)
+	plot(du[1]';subplot=1,layout=(2,1),title="sensitivity to α",size=(500,400),opts...)
 	plot!(du[2]';subplot=2,title="sensitivity to β",opts...)
 end
 
@@ -2648,16 +2671,23 @@ version = "0.9.1+5"
 # ╠═15676090-0575-42da-ac76-bab44d765b59
 # ╠═cf24cc20-16ee-47a2-a4f3-dcc9b135a665
 # ╠═65a0a050-59dd-4567-895f-73dea93bc0aa
+# ╟─fd065001-4e6a-4581-a66c-298a86c7fc73
+# ╠═227c6a7e-3483-4738-bc78-c2dc019200b8
+# ╟─9b93de2c-fc0a-43c1-9a09-71e6208134ec
 # ╠═bdceae52-6aca-4d09-9e84-f534a7058c3a
 # ╠═857611ee-db48-4731-8d9e-31b1e74254f0
 # ╠═b278223e-dc2c-496c-bb7a-8b3d025eed3d
+# ╟─2c5ca0d2-8961-44f1-af38-f3404751dc1c
 # ╠═8ccb9bd3-bcec-489a-9a3e-1da87a082ec6
-# ╠═b00af8c2-2123-42b9-8aea-0df7fdea0a5c
-# ╠═227c6a7e-3483-4738-bc78-c2dc019200b8
-# ╠═2cf415fa-6565-4701-a838-bd0a3e2ebc89
+# ╟─a09ccbe9-c43a-4e29-a241-73515bed2a8e
 # ╠═2fe0ee33-04a6-4cac-aa9f-13a2ae0d6b20
+# ╟─c3b35446-816a-45ab-a4ca-5fef3b087a29
+# ╠═b00af8c2-2123-42b9-8aea-0df7fdea0a5c
+# ╟─c1befd13-37ac-4e79-93ff-730a26674f60
 # ╠═12697fb8-b46a-4e1d-b6b5-ad789e7e2666
+# ╟─f538e845-4924-4eb2-92ac-26b53ad69d96
 # ╠═52c7bd0b-f88f-4249-b48c-fc83a1f812aa
+# ╟─a3fb04f4-7534-4a74-88d7-8fbf426fe4bf
 # ╠═3b2d4947-dcb8-42f3-b774-0f918056ebf0
 # ╟─f9a04c68-9a36-4606-a2f1-edbc4bf2b483
 # ╠═42801b27-b74a-4721-9332-1cf7ac81425d
@@ -2669,7 +2699,7 @@ version = "0.9.1+5"
 # ╠═32374522-03f0-4a9a-ae54-c7cff45587ef
 # ╟─611c56a4-3ebe-465e-8679-0257ce150e0f
 # ╟─a7517a6d-6fb9-4eb2-bed4-dd04e9d56254
-# ╠═9982199f-32f9-4bd9-9077-f444081d4259
+# ╟─9982199f-32f9-4bd9-9077-f444081d4259
 # ╠═f2a5bf67-f664-4b27-8338-227587f84dfa
 # ╠═134ace87-de0e-4816-a88a-6d8ed3f7ea50
 # ╠═3ce4f1ef-3827-41c1-b9c2-3a5b37af9f0a
