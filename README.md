@@ -61,19 +61,21 @@ There is Julia [support for vim](https://github.com/JuliaEditorSupport/julia-vim
 * [Random numbers](random_numbers.ipynb)
 * [Arrays and matrices](pluto/arrays_matrices.jl), [HTML version](pluto/arrays_matrices.jl.html)
 * [Functions](functions.jl)
-* [Methods and dispatch](methods.ipynb)
 * [Graphics](pluto/graphics.jl)
 * [Linear algebra](pluto/linear-algebra.jl)
-* [Modules and packages](modules_packages.ipynb)
-* [Optimization](pluto/optimization.jl)
 * [Differential equations](pluto/diffeqs.jl)
-* Performance
-* Custom types
+* [Optimization](pluto/optimization.jl)
+* [Methods and dispatch](methods.ipynb)
+* [Modules and packages](modules_packages.ipynb)
 * Unit testing
+* Performance
+
+<!-- 
+* Custom types
 * Interpolation and approximation
 * Images and video
 * Machine learning
-* Dr Watson
+* Dr Watson -->
 
 ## Exercises
 
