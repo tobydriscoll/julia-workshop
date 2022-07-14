@@ -1,0 +1,7 @@
+name = "Circles"
+uuid = "d1e90fa7-c373-4a27-af0e-866b5fcf5b0a"
+authors = ["Toby Driscoll <driscoll@udel.edu>"]
+version = "0.1.0"
+
+[deps]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
