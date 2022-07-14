@@ -67,8 +67,8 @@ There is Julia [support for vim](https://github.com/JuliaEditorSupport/julia-vim
 * [Optimization](pluto/optimization.jl)
 * [Methods and dispatch](methods.ipynb)
 * [Modules and packages](modules_packages.ipynb)
-* Unit testing
-* Performance
+* Unit testing (see the `cheb_` files)
+* [Performance](performance.jl)
 
 <!-- 
 * Custom types
